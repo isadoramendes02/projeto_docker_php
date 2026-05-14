@@ -52,11 +52,11 @@ if(isset($_POST['cadastrar'])){
 <p><?php echo $msg; ?></p>
 
 <form method="POST">
-    <input type="text" name="nome" placeholder="Nome">
+    <input type="text" name="nome" placeholder="Nome" required>
 
-    <input type="email" name="email" placeholder="Email">
+    <input type="email" name="email" placeholder="Email" required>
 
-    <input type="password" name="senha" placeholder="Senha">
+    <input type="password" name="senha" placeholder="Senha" required>
 
     <button type="submit" name="cadastrar"> Cadastrar </button>
 </form>
