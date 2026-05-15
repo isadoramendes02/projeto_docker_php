@@ -33,36 +33,62 @@ if (isset($_POST['login'])){
 }
 ?>
 
+
+<?php
+
+$fundos = [
+    "img/img1.png",
+    "img/img2.png",
+    "img/img3.png",
+    "img/img4.png"
+];
+
+$fundo = $fundos[array_rand($fundos)];
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <p><?php echo $msg; ?></p>
+<body style="background-image: url('<?php echo $fundo; ?>');">
 
-    <form method="POST">
+<div class="container">
 
-        <input type="email" name="email" placeholder="Email" required>
+<img src="img/logo.png" class="logo">
 
-        <br><br>
+<div class="login-box">
 
-        <input type="password" name="senha" placeholder="Senha" required>
 
-        <br><br>
 
-        <button type="submit" name="login">
-            Entrar
-        </button>
-    </form>
+<h2>Login</h2>
 
-    <br>
+<p><?php echo $msg; ?></p>
 
-    <a href="cadastro.php">
-        Ir para cadastro
-    </a>
+<form method="POST">
+
+    <input type="email" name="email" placeholder="Email">
+
+    <input type="password" name="senha" placeholder="Senha">
+
+    <button type="submit" name="login">
+        Entrar
+    </button>
+
+</form>
+
+<br>
+
+<a href="cadastro.php">
+    Ir para cadastro
+</a>
+
+</div>
+</div>
 
 </body>
 </html>

@@ -29,7 +29,9 @@ if(isset($_POST['cadastrar'])){
 
         if($insert->execute()){
 
-            $msg = "Cadastro realizado com sucesso!";
+            header("Location:login.php");
+            exit;
+            
         } else {
 
             $msg = "Erro ao cadastrar!";
@@ -44,21 +46,27 @@ if(isset($_POST['cadastrar'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    
+
+<div class="login-box">
+
 <h2>Cadastro</h2>
 
 <p><?php echo $msg; ?></p>
 
 <form method="POST">
-    <input type="text" name="nome" placeholder="Nome" required>
 
-    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="nome" placeholder="Nome" required><br><br>
 
-    <input type="password" name="senha" placeholder="Senha" required>
+    <input type="email" name="email" placeholder="Email" required><br><br>
 
-    <button type="submit" name="cadastrar"> Cadastrar </button>
+    <input type="password" name="senha" placeholder="Senha" required><br><br>
+
+    <button type="submit" name="cadastrar">
+        Cadastrar
+    </button>
+
 </form>
 
 <br>
@@ -66,6 +74,8 @@ if(isset($_POST['cadastrar'])){
 <a href="login.php">
     Ir para login
 </a>
+
+</div>
 
 </body>
 </html>
