@@ -37,10 +37,15 @@ if (isset($_POST['login'])){
 <?php
 
 $fundos = [
-    "img/img1.png",
-    "img/img2.png",
-    "img/img3.png",
-    "img/img4.png"
+    "img/img1.1.png",
+    "img/img1.2.png",
+    "img/img1.3.png",
+    "img/img1.4.png",
+    "img/img1.5.png",
+    "img/img1.6.png",
+    "img/img1.7.png",
+    "img/img1.8.png",
+    "img/img1.9.png"
 ];
 
 $fundo = $fundos[array_rand($fundos)];
