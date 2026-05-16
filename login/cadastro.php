@@ -1,5 +1,20 @@
 <?php 
 
+$fundos = [
+    "img/img1.1.png",
+    "img/img1.2.png",
+    "img/img1.3.png",
+    "img/img1.4.png",
+    "img/img1.5.png",
+    "img/img1.6.png",
+    "img/img1.7.png",
+    "img/img1.8.png",
+    "img/img1.9.png"
+];
+
+
+$fundo = $fundos[array_rand($fundos)];
+
 include("conexao.php");
 
 $msg = "";
@@ -48,6 +63,8 @@ if(isset($_POST['cadastrar'])){
     <title>Cadastro</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
+<img src="<?php echo $fundo; ?>" class="bg">
 
 <div class="login-box">
 
