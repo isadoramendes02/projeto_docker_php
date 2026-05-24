@@ -1,0 +1,90 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* FUNDO */
+body {
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* CONTAINER */
+.create-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+/* FORM */
+.create-form {
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+/* TÍTULO */
+.create-form h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+/* LABEL */
+.create-form label {
+    color: #cbd5f5;
+    font-size: 14px;
+}
+
+/* INPUTS */
+.create-form input,
+.create-form textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+
+/* TEXTAREA */
+.create-form textarea {
+    resize: none;
+    height: 100px;
+}
+
+/* BOTÃO */
+.create-form button {
+    background: #22c55e;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.create-form button:hover {
+    background: #16a34a;
+}
+
+/* LINK VOLTAR */
+.voltar {
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    color: #38bdf8;
+    text-decoration: none;
+}
+
+.voltar:hover {
+    text-decoration: underline;
+}

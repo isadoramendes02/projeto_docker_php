@@ -8,3 +8,11 @@ CREATE TABLE usuarios (
     email VARCHAR(255),
     senha VARCHAR(255)
 );
+
+CREATE TABLE filmes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255),
+    descricao TEXT,
+    imagem VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
