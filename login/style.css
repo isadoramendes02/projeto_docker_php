@@ -1,63 +1,88 @@
-/* sistema de login */
-.bg{
+/* Fonte personalizada */
+@font-face {
+    font-family: 'MagnoliaScript';
+    src: url('../fontes/MagnoliaScript.otf');
+}
+
+/* Fonte aplicada em títulos */
+h1 {
+    font-family: 'MagnoliaScript';
+}
+
+/* Fundo fixo com imagem */
+.bg {
     position: fixed;
     top: 0;
     left: 0;
-
     width: 100%;
     height: 100vh;
-
     object-fit: cover;
-
     z-index: -1;
 }
 
-body{
+/* Fundo dinâmico via JS */
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+/* Estilo geral da página */
+body {
     background: #141414;
-    font-family: Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.login-box{
-    background: #1f1f1f;
-    padding: 40px;
+/* Caixa de login e cadastro */
+.login-box {
+    background: rgba(0,0,0,0.75);
+    padding: 20px;
     border-radius: 10px;
     width: 320px;
     text-align: center;
     box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
 }
 
-h2{
+/* Título da caixa */
+h2 {
     color: white;
     margin-bottom: 30px;
 }
 
-input{
+/* Campos de input */
+input {
     width: 100%;
-    padding: 12px;
+    padding: 12px 15px;
     margin-bottom: 15px;
     border: none;
     border-radius: 5px;
     background: #333;
     color: white;
     font-size: 15px;
+    box-sizing: border-box;
 }
 
-input::placeholder{
+/* Placeholder dos inputs */
+input::placeholder {
     color: #aaa;
 }
 
-button{
+/* Botão padrão */
+button {
     width: 100%;
     padding: 12px;
-    background: #e50914;
+    background: linear-gradient(135deg, #2b0a3d, #6a0dad, #c084fc);
     border: none;
     border-radius: 5px;
     color: white;
@@ -66,24 +91,80 @@ button{
     transition: 0.3s;
 }
 
-button:hover{
-    background: #ff1e28;
+/* Hover do botão */
+button:hover {
+    background: black;
 }
-.buttons{
+
+/* Layout da home */
+.home {
+    background: #141414;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container da home */
+.home-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Título da home */
+.home-box h1 {
+    color: white !important;
+    text-align: center !important;
+    font-size: 45px !important;
+    width: 100%;
+    margin-top: -40px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Texto da home */
+.home-box p {
+    color: #cfcfcf;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+/* Logo do login */
+.logo {
+    width: 180px;
+    margin-bottom: 8px;
+}
+
+/* Logo da home */
+.Logo-home {
+    width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    display: block;
+    position: relative;
+    z-index: 10;
+}
+
+/* Botões da home */
+.buttons {
     display: flex;
     justify-content: center;
     gap: 25px;
     margin-top: 25px;
 }
 
-.btn-box{
+/* Container dos botões */
+.btn-box {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.home-btn{
-    background: #e50914;
+/* Botão da home */
+.home-btn {
+    background: linear-gradient(135deg, #2b0a3d, #6a0dad, #c084fc);
     color: white;
     text-decoration: none;
     padding: 14px 35px;
@@ -94,134 +175,32 @@ button:hover{
     text-align: center;
 }
 
-.home-btn:hover{
-    background: #ff1e28;
+/* Hover do botão home */
+.home-btn:hover {
+    background: black;
 }
 
-.btn-box span{
+/* Texto abaixo dos botões */
+.btn-box span {
     color: #bdbdbd;
     margin-top: 8px;
     font-size: 14px;
 }
 
-a{
-    color: #e50914;
+/* Links */
+a {
+    color: #ffffff;
     text-decoration: none;
 }
 
-p{
+/* Texto padrão */
+p {
     color: white;
 }
 
-    .container{
+/* Container genérico */
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.logo{
-    width: 220px;
-    margin-bottom: 8px;
-
-}
-
-
-.home{
-    background: #141414;
-    height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.home-box{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.home-box h1{
-    color: white !important;
-    text-align: center !important;
-    font-size: 45px !important;
-    width: 100%;
-    margin-top: -40px;
-    margin-bottom: 5px;
-    display: block;
-}
-
-.home-box p{
-    color: #cfcfcf;
-    text-align: center;
-    font-size: 18px;
-    margin-top: 0;
-    margin-bottom: 30px;
-}
-
-/* fim sistema de login */
-
-/* sistema */
-
-/* CONTAINER DO CREATE */
-.create-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-}
-
-/* FORMULÁRIO */
-.create-form {
-    background: #1a1a1a;
-    padding: 30px;
-    border-radius: 10px;
-    width: 400px;
-    box-shadow: 0 0 15px rgba(229, 9, 20, 0.3);
-}
-
-/* TÍTULO */
-.create-form h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* INPUTS */
-.create-form input,
-.create-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 5px;
-    background: #333;
-    color: #fff;
-}
-
-/* INPUT FILE */
-.create-form input[type="file"] {
-    background: none;
-    color: #ccc;
-}
-
-/* BOTÃO */
-.create-form button {
-    width: 100%;
-    padding: 12px;
-    background: #e50914;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.create-form button:hover {
-    background: #ff1f1f;
-}
-
-/* BOTÃO VOLTAR */
-.voltar {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
 }

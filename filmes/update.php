@@ -40,21 +40,43 @@ $stmt->execute([':id' => $id]);
 $filme = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
-<h1>Editar Filme</h1>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Filme</title>
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<body class="update-body">
 
-<form method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="<?= $filme['id'] ?>">
+    <div class="create-container"> 
+        <form method="POST" enctype="multipart/form-data" class="create-form">
+            
+            <h1>Editar Filme</h1>
 
-    Título:<br>
-    <input type="text" name="titulo" value="<?= $filme['titulo'] ?>"><br><br>
+            <input type="hidden" name="id" value="<?= $filme['id'] ?>">
 
-    Descrição:<br>
-    <textarea name="descricao"><?= $filme['descricao'] ?></textarea><br><br>
+            <label>Título</label>
+            <input type="text" name="titulo" value="<?= $filme['titulo'] ?>" required>
 
-    <img src="../uploads/<?= $filme['imagem'] ?>" width="100"><br><br>
+            <label>Descrição</label>
+            <textarea name="descricao" required><?= $filme['descricao'] ?></textarea>
 
-    Nova imagem:<br>
-    <input type="file" name="imagem"><br><br>
+            <label>Imagem Atual</label>
+            <div class="current-image-container">
+                <img src="../uploads/<?= $filme['imagem'] ?>" class="update-preview-img">
+            </div>
 
-    <button type="submit">Atualizar</button>
-</form>
+            <label>Nova Imagem (Opcional)</label> 
+            <input type="file" name="imagem" id="imagem" style="display: none;">
+            <label for="imagem" class="file-button">Escolher arquivo</label>
+
+            <button type="submit" class="btn-atualizar">Salvar Alterações</button>
+
+            <a href="read.php" class="voltar">← Cancelar</a>
+            
+        </form>
+    </div>
+
+</body>
+</html>
