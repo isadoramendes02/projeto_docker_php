@@ -1,5 +1,10 @@
 <?php
+
+session_start();
 include '../conexao.php';
+
+$usuario_id = $_SESSION['usuario_id'];
+
 ?>
 
 <!DOCTYPE html>
@@ -19,27 +24,32 @@ include '../conexao.php';
 
     <ul class="navbar-abas">
 
-    <li>
-        <a href="../login/index.php" class="aba-item">Início</a>
-    </li>
+        <li>
+            <a href="../principal.php" class="aba-item">Início</a>
+        </li>
 
-    <li>
-        <a href="../filmes/read.php" class="aba-item">Filmes</a>
-    </li>
+        <li>
+            <a href="../filmes/read.php" class="aba-item">Filmes</a>
+        </li>
 
-    <li>
-        <a href="../series/read.php" class="aba-item">Séries</a>
-    </li>
+        <li>
+            <a href="../series/read.php" class="aba-item">Séries</a>
+        </li>
 
-    <li>
-        <a href="../favoritos/read.php" class="aba-item ativa">Favoritos</a>
-    </li>
+        <li>
+            <a href="../favoritos/read.php" class="aba-item ativa">Favoritos</a>
+        </li>
 
-    <li>
-        <a href="../avaliacoes/read.php" class="aba-item">Avaliação</a>
-    </li>
+        <li>
+            <a href="../avaliacoes/read.php" class="aba-item">Avaliação</a>
+        </li>
+        <li>
+            <a href="../logout.php" class="aba-item">
+                Sair
+            </a>
+        </li>
 
-</ul>
+    </ul>
 
 </nav>
 
@@ -58,10 +68,18 @@ include '../conexao.php';
     <div class="movies-grid">
 
         <?php
-        $sql = "SELECT * FROM favoritos";
-        $result = $conn->query($sql);
 
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $stmt = $conn->prepare("
+            SELECT *
+            FROM favoritos
+            WHERE usuario_id = :usuario_id
+        ");
+
+        $stmt->execute([
+            ':usuario_id' => $usuario_id
+        ]);
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         ?>
 
             <div class="movie-card">

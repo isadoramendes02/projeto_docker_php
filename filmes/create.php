@@ -1,10 +1,14 @@
 <?php
 
+session_start();
+
 // Conexão com o banco
 include '../conexao.php';
 
 // Processamento do formulário
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $usuario_id = $_SESSION['usuario_id'];
 
     $titulo = $_POST['titulo'];
     $descricao = $_POST['descricao'];
@@ -14,11 +18,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
 
     // Inserção no banco
-    $sql = "INSERT INTO filmes (titulo, descricao, imagem)
-            VALUES (:titulo, :descricao, :imagem)";
+    $sql = "
+        INSERT INTO filmes (
+            usuario_id,
+            titulo,
+            descricao,
+            imagem
+        )
+        VALUES (
+            :usuario_id,
+            :titulo,
+            :descricao,
+            :imagem
+        )
+    ";
 
     $stmt = $conn->prepare($sql);
+
     $stmt->execute([
+        ':usuario_id' => $usuario_id,
         ':titulo' => $titulo,
         ':descricao' => $descricao,
         ':imagem' => $imagem
@@ -28,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
 }
 
-// Lista de fundos (login style)
+// Lista de fundos
 $fundos = [
     "../login/img/img1.1.png",
     "../login/img/img1.2.png",
@@ -43,10 +61,8 @@ $fundos = [
 
 ?>
 
-<!-- CSS -->
 <link rel="stylesheet" href="../css/index.css">
 
-<!-- Formulário -->
 <div class="create-container">
 
     <form method="POST" enctype="multipart/form-data" class="create-form">
@@ -61,7 +77,7 @@ $fundos = [
 
         <label>Imagem</label>
 
-        <input type="file" name="imagem" id="imagem" required style="display: none;">
+        <input type="file" name="imagem" id="imagem" required style="display:none;">
         <label for="imagem" class="file-button">Escolher arquivo</label>
 
         <button type="submit">Salvar</button>
@@ -72,15 +88,14 @@ $fundos = [
 
 </div>
 
-<!-- Script de fundo dinâmico -->
 <script>
-    const fundos = <?php echo json_encode($fundos); ?>;
-    let i = 0;
+const fundos = <?php echo json_encode($fundos); ?>;
+let i = 0;
 
+document.body.style.backgroundImage = `url('${fundos[i]}')`;
+
+setInterval(() => {
+    i = (i + 1) % fundos.length;
     document.body.style.backgroundImage = `url('${fundos[i]}')`;
-
-    setInterval(() => {
-        i = (i + 1) % fundos.length;
-        document.body.style.backgroundImage = `url('${fundos[i]}')`;
-    }, 5000);
+}, 5000);
 </script>

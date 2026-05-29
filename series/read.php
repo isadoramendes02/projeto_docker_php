@@ -1,5 +1,13 @@
 <?php
+session_start();
 include '../conexao.php';
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login/index.php");
+    exit;
+}
+
+$usuario_id = $_SESSION['usuario_id'];
 ?>
 
 <!DOCTYPE html>
@@ -9,101 +17,149 @@ include '../conexao.php';
     <title>Séries</title>
     <link rel="stylesheet" href="../css/index.css">
 </head>
-<body>
 
-    <nav class="navbar-sistema">
+<body class="read-body">
 
-        <div class="navbar-logo">
-            <a href="#">FlixHub</a>
+<nav class="navbar-sistema">
+
+    <div class="navbar-logo">
+        <a href="../principal.php">FlixHub</a>
+    </div>
+
+    <ul class="navbar-abas">
+
+        <li>
+            <a href="../principal.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'principal') !== false ? 'ativa' : '' ?>">
+                Início
+            </a>
+        </li>
+
+        <li>
+            <a href="../filmes/read.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'filmes') !== false ? 'ativa' : '' ?>">
+                Filmes
+            </a>
+        </li>
+
+        <li>
+            <a href="../series/read.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'series') !== false ? 'ativa' : '' ?>">
+                Séries
+            </a>
+        </li>
+
+        <li>
+            <a href="../favoritos/read.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'favoritos') !== false ? 'ativa' : '' ?>">
+                Favoritos
+            </a>
+        </li>
+
+        <li>
+            <a href="../avaliacoes/read.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'avaliacoes') !== false ? 'ativa' : '' ?>">
+                Avaliações
+            </a>
+        </li>
+        <li>
+            <a href="../logout.php" class="aba-item">
+                Sair
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+<div class="catalog-container">
+
+    <div class="catalog-header">
+
+        <h1>Séries Disponíveis</h1>
+
+        <div class="header-actions">
+            <a href="create.php" class="btn-novo">
+                Add Nova Série
+            </a>
         </div>
 
-        <ul class="navbar-abas">
+    </div>
 
-    <li>
-        <a href="../login/index.php" class="aba-item">Início</a>
-    </li>
+    <div class="movies-grid">
 
-    <li>
-        <a href="../filmes/read.php" class="aba-item">Filmes</a>
-    </li>
+        <?php
+        $stmt = $conn->prepare("
+            SELECT *
+            FROM series
+            WHERE usuario_id = :usuario_id
+        ");
 
-    <li>
-        <a href="../series/read.php" class="aba-item ativa">Séries</a>
-    </li>
+        $stmt->execute([
+            ':usuario_id' => $usuario_id
+        ]);
 
-    <li>
-        <a href="../favoritos/read.php" class="aba-item">Favoritos</a>
-    </li>
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
-    <li>
-        <a href="../avaliacoes/read.php" class="aba-item">Avaliação</a>
-    </li>
+            $stmtFav = $conn->prepare("
+                SELECT COUNT(*)
+                FROM favoritos
+                WHERE titulo = :titulo
+                AND usuario_id = :usuario_id
+            ");
 
-</ul>
+            $stmtFav->execute([
+                ':titulo' => $row['titulo'],
+                ':usuario_id' => $usuario_id
+            ]);
 
-    </nav>
+            $favoritado = $stmtFav->fetchColumn() > 0;
+        ?>
 
-    <div class="catalog-container">
+        <div class="movie-card">
 
-        <div class="catalog-header">
+            <div class="movie-poster">
+                <img src="../uploads/<?php echo $row['imagem']; ?>" alt="Poster da Série">
+            </div>
 
-            <h1>Séries Disponíveis</h1>
+            <div class="movie-info">
 
-            <div class="header-actions">
-                <a href="create.php" class="btn-novo">
-                    Add Nova Série
-                </a>
+                <h3>
+                    <?php echo $row['titulo']; ?>
+
+                    <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo']); ?>&tipo=Serie"
+                    class="<?= $favoritado ? 'favorito' : '' ?>">
+                        ★
+                    </a>
+                </h3>
+
+                <p>
+                    <?php echo $row['descricao']; ?>
+                </p>
+
+                <div class="movie-actions">
+
+                    <a href="update.php?id=<?php echo $row['id']; ?>"
+                        class="btn-editar">
+                        Editar
+                    </a>
+
+                    <a href="delete.php?id=<?php echo $row['id']; ?>"
+                        class="btn-deletar-lista">
+                        Excluir
+                    </a>
+
+                    <a href="../avaliacoes/create.php?serie_id=<?php echo $row['id']; ?>"
+                        class="btn-novo">
+                        Avaliar
+                    </a>
+
+                </div>
+
             </div>
 
         </div>
 
-        <div class="movies-grid">
-
-            <?php
-            $sql = "SELECT * FROM series";
-            $result = $conn->query($sql);
-
-            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            ?>
-
-                <div class="movie-card">
-
-                    <div class="movie-poster">
-                        <img src="../uploads/<?php echo $row['imagem']; ?>" alt="">
-                    </div>
-
-                    <div class="movie-info">
-
-                        <h3><?php echo $row['titulo']; ?></h3>
-
-                        <p>
-                            <?php echo $row['descricao']; ?>
-                        </p>
-
-                        <div class="movie-actions">
-
-                            <a href="update.php?id=<?php echo $row['id']; ?>"
-                                class="btn-editar">
-                                Editar
-                            </a>
-
-                            <a href="delete.php?id=<?php echo $row['id']; ?>"
-                                class="btn-deletar-lista"
-                                onclick="return confirm('Deseja excluir esta série?')">
-                                Excluir
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            <?php } ?>
-
-        </div>
+        <?php } ?>
 
     </div>
+
+</div>
 
 </body>
 </html>

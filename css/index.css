@@ -282,11 +282,18 @@ body {
     flex-direction: column;
 }
 
+.movie-card {
+    overflow: hidden;
+}
+
 .movie-poster img {
     width: 100%;
     height: 350px;
     object-fit: cover;
+    object-position: center;
+    display: block;
 }
+
 
 .movie-info {
     padding: 15px;
@@ -336,7 +343,19 @@ body {
 
 /* favorito */
 .movie-info h3 a {
-    color: gold !important;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 22px;
+    float: right;
+    transition: 0.2s;
+}
+
+.movie-info h3 a:hover {
+    transform: scale(1.2);
+}
+
+.movie-info h3 a.favorito {
+    color: #facc15;
 }
 /* fim cards */
 
@@ -357,3 +376,41 @@ body {
     transform: scale(1.05);
 }
 
+/* editar imagem  */
+.update-preview-img {
+    width: 220px;   /* 🔥 mais larga */
+    height: 200px;  /* mantém altura parecida */
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+/* fim de editar imagem  */
+
+/* 
+favoritos imagem */
+
+/* avaliações */
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.mini-img {
+    width: 80px;
+    height: 110px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    border: 2px solid #5b1769;
+    flex-shrink: 0;
+}
+/* estrelas */
+.stars {
+    font-size: 16px;
+    line-height: 1;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}

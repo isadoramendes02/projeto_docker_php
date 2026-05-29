@@ -1,28 +1,101 @@
 <?php
+session_start();
 include '../conexao.php';
 
-$filme_id = $_GET['filme_id'];
+$usuario_id = $_SESSION['usuario_id'];
 
-$stmt = $conn->prepare("SELECT * FROM filmes WHERE id = :id");
-$stmt->execute([':id' => $filme_id]);
-$filme = $stmt->fetch(PDO::FETCH_ASSOC);
+$id = null;
+$item = null;
+$tipo = '';
+
+if (isset($_GET['filme_id'])) {
+
+    $id = $_GET['filme_id'];
+    $tipo = 'filme';
+
+    $stmt = $conn->prepare("
+        SELECT *
+        FROM filmes
+        WHERE id = :id
+    ");
+
+} elseif (isset($_GET['serie_id'])) {
+
+    $id = $_GET['serie_id'];
+    $tipo = 'serie';
+
+    $stmt = $conn->prepare("
+        SELECT *
+        FROM series
+        WHERE id = :id
+    ");
+
+} else {
+
+    die("Item não encontrado.");
+
+}
+
+$stmt->execute([
+    ':id' => $id
+]);
+
+$item = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$item) {
+    die("Item não encontrado.");
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $nota = $_POST['nota'];
 
-    $stmt = $conn->prepare("
-        INSERT INTO avaliacoes (filme_id, nota)
-        VALUES (:filme_id, :nota)
-    ");
+    if ($tipo == 'filme') {
 
-    $stmt->execute([
-        ':filme_id' => $filme_id,
-        ':nota' => $nota
-    ]);
+        $stmt = $conn->prepare("
+            INSERT INTO avaliacoes (
+                filme_id,
+                nota,
+                usuario_id
+            )
+            VALUES (
+                :filme_id,
+                :nota,
+                :usuario_id
+            )
+        ");
+
+        $stmt->execute([
+            ':filme_id' => $id,
+            ':nota' => $nota,
+            ':usuario_id' => $usuario_id
+        ]);
+
+    } else {
+
+        $stmt = $conn->prepare("
+            INSERT INTO avaliacoes (
+                serie_id,
+                nota,
+                usuario_id
+            )
+            VALUES (
+                :serie_id,
+                :nota,
+                :usuario_id
+            )
+        ");
+
+        $stmt->execute([
+            ':serie_id' => $id,
+            ':nota' => $nota,
+            ':usuario_id' => $usuario_id
+        ]);
+
+    }
 
     header("Location: read.php");
-    exit;
+    exit();
 }
 ?>
 
@@ -30,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Avaliar Filme</title>
+    <title>Avaliar</title>
     <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
@@ -44,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div class="catalog-container">
 
     <div class="catalog-header">
-        <h1>Avaliar: <?php echo $filme['titulo']; ?></h1>
+        <h1>Avaliar: <?php echo $item['titulo']; ?></h1>
     </div>
 
     <div class="movies-grid">
@@ -55,7 +128,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <div class="movie-info">
 
-                    <p><strong>Filme:</strong> <?php echo $filme['titulo']; ?></p>
+                    <p>
+                        <strong><?php echo ucfirst($tipo); ?>:</strong>
+                        <?php echo $item['titulo']; ?>
+                    </p>
 
                     <label>Nota:</label>
                     <br>

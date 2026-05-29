@@ -1,18 +1,36 @@
 <?php
+session_start();
 include '../conexao.php';
 
+$usuario_id = $_SESSION['usuario_id'];
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
     $titulo = $_POST['titulo'];
     $descricao = $_POST['descricao'];
 
     $imagem = $_FILES['imagem']['name'];
     move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
 
-    $sql = "INSERT INTO series (titulo, descricao, imagem)
-            VALUES (:titulo, :descricao, :imagem)";
+    $sql = "
+        INSERT INTO series (
+            usuario_id,
+            titulo,
+            descricao,
+            imagem
+        )
+        VALUES (
+            :usuario_id,
+            :titulo,
+            :descricao,
+            :imagem
+        )
+    ";
 
     $stmt = $conn->prepare($sql);
+
     $stmt->execute([
+        ':usuario_id' => $usuario_id,
         ':titulo' => $titulo,
         ':descricao' => $descricao,
         ':imagem' => $imagem
@@ -35,9 +53,19 @@ $fundos = [
 ];
 ?>
 
-<link rel="stylesheet" href="../css/index.css">
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Série</title>
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
 
 <div class="create-container">
+
     <form method="POST" enctype="multipart/form-data" class="create-form">
 
         <h1>Nova Série</h1>
@@ -58,6 +86,7 @@ $fundos = [
         <a href="read.php" class="voltar">← Voltar</a>
 
     </form>
+
 </div>
 
 <script>
@@ -71,3 +100,6 @@ $fundos = [
         document.body.style.backgroundImage = `url('${fundos[i]}')`;
     }, 5000);
 </script>
+
+</body>
+</html>
