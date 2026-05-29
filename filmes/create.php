@@ -2,12 +2,19 @@
 
 session_start();
 
+// SEGURANÇA: Se não houver um usuário logado na sessão, manda de volta pro login imediatamente
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+
 // Conexão com o banco
 include '../conexao.php';
 
 // Processamento do formulário
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    // Agora temos certeza que ela existe
     $usuario_id = $_SESSION['usuario_id'];
 
     $titulo = $_POST['titulo'];
