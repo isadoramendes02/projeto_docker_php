@@ -58,7 +58,7 @@ $fundos = [
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             ?>
-            <div class="movie-card">
+            <div class="movie-card card-favoritos">
                 <?php if (!empty($row['imagem'])) { ?>
                 <div class="movie-poster">
                     <img src="../uploads/<?php echo $row['imagem']; ?>" alt="Poster">

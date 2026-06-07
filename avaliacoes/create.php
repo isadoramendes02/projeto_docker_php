@@ -95,7 +95,7 @@ $fundos = [
     <div class="create-container">
         <form method="POST" class="create-form">
 
-            <h1>Avaliar: <?php echo $item['titulo']; ?></h1>
+            <h1>Avaliar</h1>
 
             <p>
                 <strong><?php echo ucfirst($tipo); ?>:</strong>

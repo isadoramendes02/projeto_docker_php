@@ -34,7 +34,7 @@ $fundos = [
 
     <nav class="navbar-sistema">
         <div class="navbar-logo">
-            <a href="../principal.php">FlixHub</a>
+            <div href="../principal.php">FlixHub</div>
         </div>
         <ul class="navbar-abas">
             <li><a href="../principal.php" class="aba-item">Início</a></li>
@@ -48,7 +48,7 @@ $fundos = [
 
     <div class="catalog-container">
         <div class="catalog-header">
-            <h1>Minhas Avaliações</h1>
+            <h1>Avaliar</h1>
         </div>
 
         <div class="movies-grid">

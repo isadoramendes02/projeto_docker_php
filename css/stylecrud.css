@@ -235,9 +235,9 @@ body {
 
 /* O grande bloco retangular translúcido */
 .catalog-container {
-    max-width: 1200px;
+    max-width: 1100px; /* Reduzido de 1200px para 1000px para encolher os 3 cards proporcionalmente */
     margin: 0 auto 50px auto;
-    padding: 40px;
+    padding: 25px; /* Reduzido de 40px para 25px para ajustar melhor ao tamanho menor */
     box-sizing: border-box;
     
     /* Efeito de vidro igual ao do formulário */
@@ -335,28 +335,59 @@ body {
 }
 
 /* Descrição do filme */
-.movie-info p {
-    margin: 0 0 20px 0;
-    font-size: 14px;
-    color: #475569;
-    line-height: 1.5;
-    flex-grow: 1; /* Empurra os botões sempre para o rodapé do card */
+/* Descrição do filme */
+/* Área da imagem (Poster) */
+/* 1. Ajuste da Imagem (Verticalizada) */
+.movie-poster {
+    height: 420px !important;
 }
 
-/* Alinhamento dos botões (3 colunas iguais) */
-.movie-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-}
-
-.movie-card h3, 
-.movie-card p {
-    text-align: left !important;
-    display: block !important;
+.movie-poster img {
     width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: top center !important;
 }
 
+/* 2. Ajuste do Texto e Botões (O que você realmente usou) */
+/* Container do texto (Garante espaçamento interno e organiza em linha vertical) */
+.movie-info {
+    padding: 15px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important; /* Cria um espaço fixo e perfeito de 8px entre o título, gênero e descrição */
+}
+
+/* Título */
+.movie-card h3 {
+    margin: 0 !important;
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+}
+
+/* Parágrafos (Gênero e Descrição) */
+.movie-info p {
+    margin: 0 !important; /* Reseta as margens antigas que estavam sobrepondo tudo */
+    font-size: 14px !important;
+    color: #475569 !important;
+    line-height: 1.5 !important;
+    text-align: left !important;
+}
+
+/* Trava uma altura mínima apenas na descrição para manter os botões alinhados */
+/* Trava uma altura mínima na descrição e adiciona o espaço extra abaixo do gênero */
+.movie-info p:not(:has(b)) {
+    margin-top: 15px !important; /* Aumente ou diminua esse número para controlar o espaço entre o gênero e a descrição */
+    min-height: 90px !important; 
+    flex-grow: 1 !important;
+}
+/* Alinhamento dos botões (3 colunas iguais no rodapé) */
+.movie-actions {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    margin-top: auto !important; /* Empurra os botões sempre para o final do card */
+}
 /* Estilo base dos botões de ação */
 .btn-editar, .btn-deletar-lista, .movie-actions .btn-novo {
     display: flex;
@@ -493,6 +524,29 @@ body {
     transform: none !important;
 }
 
+/* 1. Tira o poder do flex-grow de esticar os textos nos favoritos */
+.card-favoritos .movie-info p {
+    margin: 0 0 6px 0 !important; /* Espaçamento padrão pequeno entre as linhas */
+    padding: 0 !important;
+    min-height: auto !important; /* Desfaz qualquer altura mínima herdada */
+    flex-grow: 0 !important;     /* Impede o parágrafo de esticar o espaço em branco */
+}
+
+/* 2. Remove qualquer margem de cima e de baixo da Observação */
+.card-favoritos .movie-info p:last-of-type {
+    margin-top: 0px !important;
+    margin-bottom: 20px !important; /* Cria um espaço fixo e controlado antes dos botões */
+}
+
+/* 3. Faz o botão ir para o final do card sem precisar esticar o texto */
+.card-favoritos .movie-info {
+    justify-content: flex-start !important; /* Alinha os textos no topo */
+}
+
+.card-favoritos .movie-actions {
+    margin-top: auto !important; /* Empurra os botões para o rodapé do card de forma limpa */
+}
+
 /* pagina avaliação */
 .navbar-logo a {
     color: #fff !important; /* Cor branca idêntica ao texto anterior */
@@ -501,12 +555,14 @@ body {
     font-family: 'font9';
 }
 
+
+
 /* Controla o container da imagem + estrelas para não esticar */
 .rating-row {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin: 15px 0;
+    margin: 0px 0 15px 0 !important;
 }
 
 /* Define um tamanho fixo e quadrado para a miniatura da imagem */
@@ -535,6 +591,25 @@ body {
 .create-form .btn-atualizar {
     margin-top: 20px !important;
 }
+
+/* Zera o espaço abaixo do Tipo */
+.read-body .movie-info p {
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+/* Força a linha da imagem e estrelas a subir totalmente */
+.read-body .rating-row {
+    margin-top: -40px !important; /* Margem negativa puxa a imagem para cima na marra */
+    padding-top: 0px !important;
+}
+
+/* Garante que a própria miniatura não tenha margem empurrando */
+.read-body .mini-img {
+    margin-top: 0px !important;
+}
+
+
 
 /* pagina de login */
 /* ==========================================================================
@@ -585,7 +660,7 @@ h1 {
 p, p.msg {
     text-align: center;
     margin-bottom: 15px;
-    color: #ff6b6b; /* Cor vermelha suave para destacar mensagens de erro */
+    color: #1c183e; /* Cor vermelha suave para destacar mensagens de erro */
     font-size: 14px;
 }
 
@@ -710,7 +785,7 @@ body.dashboard-page {
 }
 
 .navbar-logo a {
-    color: #ffffff !important;
+    color: #fffffff2 !important;
     text-decoration: none !important;
     display: flex;
     align-items: center;

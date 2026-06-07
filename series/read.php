@@ -57,7 +57,7 @@ $fundos = [
 
     <div class="catalog-header">
 
-        <h1>Séries Disponíveis</h1>
+        <h1>Series Disponiveis</h1>
 
         <div class="header-actions">
             <a href="create.php" class="btn-novo">

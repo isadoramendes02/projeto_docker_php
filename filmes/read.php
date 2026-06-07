@@ -48,7 +48,7 @@ $fundos = [
 
     <div class="catalog-container">
         <div class="catalog-header">
-            <h1>Filmes Disponíveis</h1>
+            <h1>Filmes Disponiveis</h1>
             <div class="header-actions">
                 <a href="create.php" class="btn-novo">Add Novo Filme</a>
             </div>
