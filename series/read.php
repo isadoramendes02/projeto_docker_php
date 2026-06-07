@@ -8,6 +8,26 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 $usuario_id = $_SESSION['usuario_id'];
+
+
+$fundos = [
+    "../img/img2.jpg",
+    "../img/img3.jpg",
+    "../img/img4.jpg",
+    "../img/img5.jpg",
+    "../img/img6.jpg",
+    "../img/img7.jpg",
+    "../img/img8.jpg",
+    "../img/img9.jpg",
+    "../img/img10.jpg",
+    "../img/img11.jpg",
+    "../img/img12.jpg",
+    "../img/img13.jpg",
+    "../img/img14.jpg",
+    "../img/img15.jpg",
+    "../img/img16.jpg",
+    "../img/img17.jpg",
+];
 ?>
 
 <!DOCTYPE html>
@@ -15,56 +35,22 @@ $usuario_id = $_SESSION['usuario_id'];
 <head>
     <meta charset="UTF-8">
     <title>Séries</title>
-    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/stylecrud.css">
 </head>
 
 <body class="read-body">
 
 <nav class="navbar-sistema">
+        <div class="navbar-logo">FlixHub</div>
 
-    <div class="navbar-logo">
-        <a href="../principal.php">FlixHub</a>
-    </div>
-
-    <ul class="navbar-abas">
-
-        <li>
-            <a href="../principal.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'principal') !== false ? 'ativa' : '' ?>">
-                Início
-            </a>
-        </li>
-
-        <li>
-            <a href="../filmes/read.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'filmes') !== false ? 'ativa' : '' ?>">
-                Filmes
-            </a>
-        </li>
-
-        <li>
-            <a href="../series/read.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'series') !== false ? 'ativa' : '' ?>">
-                Séries
-            </a>
-        </li>
-
-        <li>
-            <a href="../favoritos/read.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'favoritos') !== false ? 'ativa' : '' ?>">
-                Favoritos
-            </a>
-        </li>
-
-        <li>
-            <a href="../avaliacoes/read.php" class="aba-item <?= strpos($_SERVER['REQUEST_URI'], 'avaliacoes') !== false ? 'ativa' : '' ?>">
-                Avaliações
-            </a>
-        </li>
-        <li>
-            <a href="../logout.php" class="aba-item">
-                Sair
-            </a>
-        </li>
-
-    </ul>
-
+        <ul class="navbar-abas">
+            <li><a href="../principal.php" class="aba-item">Início</a></li>
+            <li><a href="../filmes/read.php" class="aba-item">Filmes</a></li>
+            <li><a href="../series/read.php" class="aba-item ativa">Séries</a></li>
+            <li><a href="../favoritos/read.php" class="aba-item">Favoritos</a></li>
+            <li><a href="../avaliacoes/read.php" class="aba-item">Avaliações</a></li>
+            <li><a href="../logout.php" class="aba-item">Sair</a></li>
+        </ul>
 </nav>
 
 <div class="catalog-container">
@@ -120,16 +106,22 @@ $usuario_id = $_SESSION['usuario_id'];
             <div class="movie-info">
 
                 <h3>
-                    <?php echo $row['titulo']; ?>
+                    <?php echo htmlspecialchars($row['titulo']); ?>
 
-                    <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo']); ?>&tipo=Serie"
+                    <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo']); ?>&tipo=Série&genero=<?php echo urlencode($row['genero'] ?? ''); ?>"
                     class="<?= $favoritado ? 'favorito' : '' ?>">
                         ★
                     </a>
                 </h3>
 
+                <?php if (!empty($row['genero'])) { ?>
+                    <p>
+                        <b>Gênero:</b> <?php echo htmlspecialchars($row['genero']); ?>
+                    </p>
+                <?php } ?>
+
                 <p>
-                    <?php echo $row['descricao']; ?>
+                    <?php echo htmlspecialchars($row['descricao']); ?>
                 </p>
 
                 <div class="movie-actions">
@@ -160,6 +152,17 @@ $usuario_id = $_SESSION['usuario_id'];
     </div>
 
 </div>
-
 </body>
 </html>
+
+<script>
+    const fundos = <?php echo json_encode($fundos); ?>;
+    let i = 0;
+
+    document.body.style.backgroundImage = `url('${fundos[i]}')`;
+
+    setInterval(() => {
+        i = (i + 1) % fundos.length;
+        document.body.style.backgroundImage = `url('${fundos[i]}')`;
+    }, 5000);
+</script>

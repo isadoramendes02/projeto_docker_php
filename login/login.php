@@ -1,5 +1,4 @@
 <?php
-
 // Inicia sessão do usuário
 session_start();
 
@@ -11,7 +10,6 @@ $msg = "";
 
 // Verifica envio do formulário
 if (isset($_POST['login'])) {
-
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
@@ -26,11 +24,9 @@ if (isset($_POST['login'])) {
     $sql->execute();
 
     if ($sql->rowCount() > 0) {
-
         $usuario = $sql->fetch(PDO::FETCH_ASSOC);
 
         if (password_verify($senha, $usuario['senha'])) {
-
             // SALVA O ID DO USUÁRIO
             $_SESSION['usuario_id'] = $usuario['id'];
 
@@ -40,107 +36,74 @@ if (isset($_POST['login'])) {
 
             header("Location: ../principal.php");
             exit;
-
         } else {
-
             $msg = "Senha incorreta!";
-
         }
-
     } else {
-
         $msg = "Usuário não encontrado!";
-
     }
 }
-?>
 
+$fundos = [
+    "../img/img2.jpg",
+    "../img/img3.jpg",
+    "../img/img4.jpg",
+    "../img/img5.jpg",
+    "../img/img6.jpg",
+    "../img/img7.jpg",
+    "../img/img8.jpg",
+    "../img/img9.jpg",
+    "../img/img10.jpg",
+    "../img/img11.jpg",
+    "../img/img12.jpg",
+    "../img/img13.jpg",
+    "../img/img14.jpg",
+    "../img/img15.jpg",
+    "../img/img16.jpg",
+    "../img/img17.jpg",
+];
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - FlixHub</title>
-
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/stylecrud.css">
 </head>
+<body class="login-body">
 
-<body>
+    <div class="container">
+        <div class="login-box">
 
-<div id="bg"></div>
+            <h1>Login</h1>
 
-<div class="container">
+            <?php if (!empty($msg)): ?>
+                <p class="msg"><?php echo $msg; ?></p>
+            <?php endif; ?>
 
-    <div class="login-box">
+            <form method="POST">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit" name="login">Entrar</button>
+            </form>
 
-        <h2>Login</h2>
+            <a href="cadastro.php">Não tem uma conta? Cadastre-se</a>
 
-        <p class="msg">
-            <?php echo $msg; ?>
-        </p>
-
-        <form method="POST">
-
-            <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-            >
-
-            <input
-                type="password"
-                name="senha"
-                placeholder="Senha"
-                required
-            >
-
-            <button type="submit" name="login">
-                Entrar
-            </button>
-
-        </form>
-
-        <br>
-
-        <a href="cadastro.php">
-            Ir para cadastro
-        </a>
-
+        </div>
     </div>
 
-</div>
+    <script>
+        const fundos = <?php echo json_encode($fundos); ?>;
+        let i = 0;
 
-<script>
-
-const fundos = [
-    "img/img1.1.png",
-    "img/img1.2.png",
-    "img/img1.3.png",
-    "img/img1.4.png",
-    "img/img1.5.png",
-    "img/img1.6.png",
-    "img/img1.7.png",
-    "img/img1.8.png",
-    "img/img1.9.png"
-];
-
-let index = 0;
-
-const bg = document.getElementById("bg");
-
-function trocarFundo() {
-
-    bg.style.backgroundImage = `url('${fundos[index]}')`;
-
-    index = (index + 1) % fundos.length;
-}
-
-trocarFundo();
-
-setInterval(trocarFundo, 5000);
-
-</script>
-
+        if (fundos.length > 0) {
+            document.body.style.backgroundImage = `url('${fundos[i]}')`;
+            setInterval(() => {
+                i = (i + 1) % fundos.length;
+                document.body.style.backgroundImage = `url('${fundos[i]}')`;
+            }, 5000);
+        }
+    </script>
 </body>
 </html>
