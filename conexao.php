@@ -1,6 +1,6 @@
 <?php
 
-$host = "localhost"; // Ou "db", dependendo do seu docker-compose.yml
+$host = "db"; // Ou "db", dependendo do seu docker-compose.yml
 $banco = "sistema";
 $usuario = "root";
 $senha = ""; // Substitua pela senha definida no Docker
