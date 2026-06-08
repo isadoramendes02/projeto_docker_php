@@ -50,6 +50,7 @@ $fundos = [
     "../img/img17.jpg",
 ];
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
