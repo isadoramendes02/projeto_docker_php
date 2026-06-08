@@ -6,30 +6,29 @@ $id = $_GET['id'] ?? $_POST['id'] ?? null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $titulo = $_POST['titulo'];
-    $genero = $_POST['genero']; // <-- NOVO: CAPTURA O GÊNERO ATUALIZADO
+    $genero = $_POST['genero'];
     $descricao = $_POST['descricao'];
     $imagem = $_FILES['imagem']['name'];
 
     if ($imagem) {
         move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
 
-        // Adicionado ":genero" na Query com imagem
         $sql = "UPDATE filmes SET titulo=:titulo, genero=:genero, descricao=:descricao, imagem=:imagem WHERE id=:id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':titulo' => $titulo,
-            ':genero' => $genero, // <-- NOVO: SALVA NO BANCO
+            ':genero' => $genero, 
             ':descricao' => $descricao,
             ':imagem' => $imagem,
             ':id' => $id
         ]);
     } else {
-        // Adicionado ":genero" na Query sem alteração de imagem
+        
         $sql = "UPDATE filmes SET titulo=:titulo, genero=:genero, descricao=:descricao WHERE id=:id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':titulo' => $titulo,
-            ':genero' => $genero, // <-- NOVO: SALVA NO BANCO
+            ':genero' => $genero,
             ':descricao' => $descricao,
             ':id' => $id
         ]);
@@ -39,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit;
 }
 
-// carregar dados
 $stmt = $conn->prepare("SELECT * FROM filmes WHERE id = :id");
 $stmt->execute([':id' => $id]);
 $filme = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -11,19 +11,18 @@ include '../conexao.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario_id = $_SESSION['usuario_id'];
     $titulo = $_POST['titulo'];
-    $genero = $_POST['genero']; // <-- NOVO: CAPTURA O GÊNERO SELECIONADO
+    $genero = $_POST['genero']; 
     $descricao = $_POST['descricao'];
     
     $imagem = $_FILES['imagem']['name'];
     move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
 
-    // Atualizado com a coluna e o parâmetro do gênero
     $sql = "INSERT INTO filmes (usuario_id, titulo, genero, descricao, imagem) VALUES (:usuario_id, :titulo, :genero, :descricao, :imagem)";
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         ':usuario_id' => $usuario_id,
         ':titulo'     => $titulo,
-        ':genero'     => $genero, // <-- NOVO: SALVA NO BANCO
+        ':genero'     => $genero, 
         ':descricao'  => $descricao,
         ':imagem'     => $imagem
     ]);
@@ -100,7 +99,7 @@ $fundos = [
             <textarea id="descricao" name="descricao" required></textarea>
 
             <label>Imagem</label>
-            <input type="file" name="imagem" id="imagem" required style="display:none;">
+            <input type="file" name="imagem" id="imagem" required  class="input-file">
             <label for="imagem" class="file-button">Escolher arquivo</label>
 
             <button type="submit">Salvar</button>

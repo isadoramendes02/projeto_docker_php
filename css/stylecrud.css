@@ -13,7 +13,7 @@ h1 {
 }
 
 body, h2, h3, p, a, button, input, textarea, label {
-    font-family: 'font10', Arial, sans-serif;
+    font-family: 'font10';
 }
 
 .navbar-sistema {
@@ -28,12 +28,9 @@ body, h2, h3, p, a, button, input, textarea, label {
     padding: 0 40px;
     box-sizing: border-box;
     z-index: 1000;
-    
-    /* Fundo preto transparente estilo vidro */
     background: rgba(13, 13, 13, 0.8);
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    
+    -webkit-backdrop-filter: blur(8px); 
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -98,6 +95,9 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+}
+.input-file{
+    display: none;
 }
 
 .create-container {
@@ -233,19 +233,15 @@ body {
     background-attachment: fixed;
 }
 
-/* O grande bloco retangular translúcido */
+/* bloco retangular translúcido */
 .catalog-container {
-    max-width: 1100px; /* Reduzido de 1200px para 1000px para encolher os 3 cards proporcionalmente */
+    max-width: 1100px; 
     margin: 0 auto 50px auto;
-    padding: 25px; /* Reduzido de 40px para 25px para ajustar melhor ao tamanho menor */
+    padding: 25px; 
     box-sizing: border-box;
-    
-    /* Efeito de vidro igual ao do formulário */
     background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    
-    /* Bordas arredondadas e sombra suave */
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -258,7 +254,7 @@ body {
     align-items: center;
     margin-bottom: 35px;
     padding-bottom: 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Linha sutil separando o topo */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
 }
 
 .catalog-header h1 {
@@ -300,7 +296,7 @@ body {
 .movie-poster img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Faz a imagem preencher o espaço sem distorcer */
+    object-fit: cover; 
 }
 
 /* Área de texto e botões dentro do card */
@@ -308,7 +304,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Garante que todos os cards fiquem do mesmo tamanho */
+    flex-grow: 1; 
 }
 
 /* Título e Estrela */
@@ -333,11 +329,8 @@ body {
 .movie-info h3 a.favorito {
     color: #eab308; /* Estrela amarela quando favoritada */
 }
-
-/* Descrição do filme */
 /* Descrição do filme */
 /* Área da imagem (Poster) */
-/* 1. Ajuste da Imagem (Verticalizada) */
 .movie-poster {
     height: 420px !important;
 }
@@ -349,13 +342,12 @@ body {
     object-position: top center !important;
 }
 
-/* 2. Ajuste do Texto e Botões (O que você realmente usou) */
-/* Container do texto (Garante espaçamento interno e organiza em linha vertical) */
+/* 2. Ajuste do Texto e Botões*/
 .movie-info {
     padding: 15px !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 8px !important; /* Cria um espaço fixo e perfeito de 8px entre o título, gênero e descrição */
+    gap: 8px !important; 
 }
 
 /* Título */
@@ -367,26 +359,25 @@ body {
 
 /* Parágrafos (Gênero e Descrição) */
 .movie-info p {
-    margin: 0 !important; /* Reseta as margens antigas que estavam sobrepondo tudo */
+    margin: 0 !important; 
     font-size: 14px !important;
     color: #475569 !important;
     line-height: 1.5 !important;
     text-align: left !important;
 }
 
-/* Trava uma altura mínima apenas na descrição para manter os botões alinhados */
 /* Trava uma altura mínima na descrição e adiciona o espaço extra abaixo do gênero */
 .movie-info p:not(:has(b)) {
-    margin-top: 15px !important; /* Aumente ou diminua esse número para controlar o espaço entre o gênero e a descrição */
+    margin-top: 15px !important; 
     min-height: 90px !important; 
     flex-grow: 1 !important;
 }
-/* Alinhamento dos botões (3 colunas iguais no rodapé) */
+/* Alinhamento dos botões */
 .movie-actions {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 8px !important;
-    margin-top: auto !important; /* Empurra os botões sempre para o final do card */
+    margin-top: auto !important; 
 }
 /* Estilo base dos botões de ação */
 .btn-editar, .btn-deletar-lista, .movie-actions .btn-novo {
@@ -401,7 +392,7 @@ body {
     transition: background 0.2s;
 }
 
-/* Botão Editar (Cinza discreto) */
+/* Botão Editar*/
 .btn-editar {
     background: #f1f5f9;
     color: #334155;
@@ -412,7 +403,7 @@ body {
     background: #e2e8f0;
 }
 
-/* Botão Excluir (Vermelho suave) */
+/* Botão Excluir */
 .btn-deletar-lista {
     background: #fee2e2;
     color: #ef4444;
@@ -423,7 +414,7 @@ body {
     background: #fecaca;
 }
 
-/* Botão Avaliar (Preto clean) */
+/* Botão Avaliar */
 .movie-actions .btn-novo {
     background: #0f172a;
     color: #ffffff;
@@ -438,8 +429,8 @@ body {
     justify-content: center;
     align-items: center;
     padding: 12px 24px;
-    height: auto; /* Cancela a altura padrão dos botões menores */
-    background: #0f172a; /* Preto sólido elegante */
+    height: auto; 
+    background: #0f172a;
     color: #ffffff;
     font-size: 15px;
     font-weight: bold;
@@ -451,7 +442,7 @@ body {
 
 /* Efeito ao passar o mouse */
 .catalog-header .btn-novo:hover {
-    background: #1e293b; /* Tom de preto levemente mais claro */
+    background: #1e293b; 
     transform: translateY(-1px);
 }
 
@@ -462,10 +453,11 @@ body {
 /* fim de read */
 
 /* inicio de update */
-/* ==========================================================================
-   ELEMENTOS EXCLUSIVOS DA PÁGINA UPDATE
-   ========================================================================== */
-
+.favorito-disabled {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #999;
+    cursor: not-allowed;
+}
 .update-body {
     padding-top: 120px;
     margin: 0;
@@ -518,46 +510,41 @@ body {
 
 /* pagina favoritos */
 .create-body .create-container {
-    margin: 40px auto 0 auto !important; /* Diminui o espaço do topo */
+    margin: 40px auto 0 auto !important;
     position: relative !important;
     top: 0 !important;
     transform: none !important;
 }
-
-/* 1. Tira o poder do flex-grow de esticar os textos nos favoritos */
 .card-favoritos .movie-info p {
-    margin: 0 0 6px 0 !important; /* Espaçamento padrão pequeno entre as linhas */
+    margin: 0 0 6px 0 !important; 
     padding: 0 !important;
-    min-height: auto !important; /* Desfaz qualquer altura mínima herdada */
-    flex-grow: 0 !important;     /* Impede o parágrafo de esticar o espaço em branco */
+    min-height: auto !important; 
+    flex-grow: 0 !important;     
 }
-
-/* 2. Remove qualquer margem de cima e de baixo da Observação */
 .card-favoritos .movie-info p:last-of-type {
     margin-top: 0px !important;
-    margin-bottom: 20px !important; /* Cria um espaço fixo e controlado antes dos botões */
+    margin-bottom: 20px !important; 
 }
-
-/* 3. Faz o botão ir para o final do card sem precisar esticar o texto */
 .card-favoritos .movie-info {
-    justify-content: flex-start !important; /* Alinha os textos no topo */
+    justify-content: flex-start !important;
 }
 
 .card-favoritos .movie-actions {
-    margin-top: auto !important; /* Empurra os botões para o rodapé do card de forma limpa */
+    margin-top: auto !important; 
 }
 
 /* pagina avaliação */
 .navbar-logo a {
-    color: #fff !important; /* Cor branca idêntica ao texto anterior */
-    text-decoration: none !important; /* Remove o sublinhado de link */
+    color: #fff !important;
+    text-decoration: none !important; 
     font-weight: bold;
     font-family: 'font9';
 }
 
+.btn-atualizar {
+    margin-top: 20px;
+}
 
-
-/* Controla o container da imagem + estrelas para não esticar */
 .rating-row {
     display: flex;
     align-items: center;
@@ -565,57 +552,42 @@ body {
     margin: 0px 0 15px 0 !important;
 }
 
-/* Define um tamanho fixo e quadrado para a miniatura da imagem */
 .mini-img {
     width: 80px !important;
     height: 85px !important;
-    object-fit: cover !important; /* Corta a imagem proporcionalmente sem distorcer */
+    object-fit: cover !important;
     border-radius: 4px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
-
-/* Garante o alinhamento das estrelas ao lado da imagem */
 .stars {
     font-size: 1.2rem;
-    color: #ffca28; /* Cor amarela para as estrelas */
+    color: #ffca28; 
 }
 
-/* Estilização do texto que exibe o nome do filme/série na edição */
 .item-avaliacao-texto {
     margin-bottom: 20px;
     color: #000000;
     text-align: center !important;
 }
 
-/* Ajuste no botão de atualizar específico do formulário de avaliação */
 .create-form .btn-atualizar {
     margin-top: 20px !important;
 }
 
-/* Zera o espaço abaixo do Tipo */
 .read-body .movie-info p {
     margin-bottom: 0px !important;
     padding-bottom: 0px !important;
 }
-
-/* Força a linha da imagem e estrelas a subir totalmente */
 .read-body .rating-row {
-    margin-top: -40px !important; /* Margem negativa puxa a imagem para cima na marra */
+    margin-top: -40px !important; 
     padding-top: 0px !important;
 }
 
-/* Garante que a própria miniatura não tenha margem empurrando */
 .read-body .mini-img {
     margin-top: 0px !important;
 }
 
-
-
 /* pagina de login */
-/* ==========================================================================
-   CONFIGURAÇÕES DO BODY UNIFICADAS E TELA DE LOGIN
-   ========================================================================== */
-
 body {
     min-height: 100vh;
     background-size: cover;
@@ -641,7 +613,7 @@ h1, .navbar-logo h1, .login-box h1 {
 }
 
 .container {
-    background: rgba(0, 0, 0, 0.65); /* Escurecido um pouco para dar mais leitura */
+    background: rgba(0, 0, 0, 0.65);
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -660,7 +632,7 @@ h1 {
 p, p.msg {
     text-align: center;
     margin-bottom: 15px;
-    color: #1c183e; /* Cor vermelha suave para destacar mensagens de erro */
+    color: #1c183e; 
     font-size: 14px;
 }
 
@@ -703,7 +675,7 @@ button:hover {
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     width: 100%;
-    max-width: 420px; /* Aumentou a largura total do bloco de 350px para 420px */
+    max-width: 420px; 
     color: white;
     box-sizing: border-box;
 }
@@ -711,7 +683,7 @@ button:hover {
 .container a {
     display: block;
     text-align: center;
-    text-decoration: none; /* AQUI: Remove o traço debaixo do link */
+    text-decoration: none; 
     font-size: 13px;
     margin-top: 20px;
     color: #a1a1a1;
@@ -719,7 +691,7 @@ button:hover {
 
 .container a:hover {
     color: #ffffff;
-    text-decoration: none; /* Garante que o traço não apareça nem quando passar o mouse */
+    text-decoration: none;
 }
 
 .container a:hover {
@@ -728,17 +700,13 @@ button:hover {
 }
 
 /* pagina principal */
-/* ==========================================================================
-   PAINEL PRINCIPAL / DASHBOARD
-   ========================================================================== */
-
 /* Configurações globais da página e imagem de fundo */
 body.dashboard-page {
     margin: 0;
     padding: 0;
     padding-top: 140px;    /* Espaço para não sumir atrás da navbar */
-    padding-bottom: 140px; /* AQUI: Cria o mesmo espaço idêntico na parte de baixo para a rolagem */
-    min-height: 120vh;     /* Mantém a altura esticada de 120vh */
+    padding-bottom: 140px; 
+    min-height: 120vh;    
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -747,7 +715,6 @@ body.dashboard-page {
     font-family: Arial, sans-serif;
     box-sizing: border-box;
 }
-/* Garante que o box-sizing seja herdado */
 .dashboard-page *, .dashboard-page *::before, .dashboard-page *::after {
     box-sizing: border-box;
 }
@@ -758,11 +725,11 @@ body.dashboard-page {
     top: 0;
     left: 0;
     width: 100%;
-    height: 85px; /* Altura fixa robusta */
+    height: 85px; 
     z-index: 1000;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Alinha a logo e as abas na mesma altura */
+    align-items: center; 
     padding: 0 40px;
     background: linear-gradient(90deg, #0a0a0a, #141414, #1f1f1f);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -851,7 +818,7 @@ body.dashboard-page {
 /* Grid de Cards */
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Cria duas colunas perfeitas de tamanho igual */
+    grid-template-columns: repeat(2, 1fr);
     gap: 30px;
     margin-top: 20px;
 }
@@ -862,7 +829,7 @@ body.dashboard-page {
     align-items: center;
     padding: 55px;
     border-radius: 16px;
-    background: rgba(15, 15, 15, 0.65); /* Fundo escuro semi-transparente */
+    background: rgba(15, 15, 15, 0.65);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: #ffffff !important;
@@ -881,10 +848,6 @@ body.dashboard-page {
 
 /* inicio */
 
-/* ==========================================================================
-   ESTILO DA TELA HOME - TEMÁTICA FLIXHUB (INSPIRADO NA OPÇÃO 1)
-   ========================================================================== */
-
 body.home {
     margin: 0;
     padding: 0;
@@ -895,14 +858,10 @@ body.home {
     overflow: hidden;
     background-color: #000000;
     position: relative;
-    
-    /* Alinha a sua estrutura original (home-box) inteira na esquerda da tela */
     display: flex;
     align-items: center;
-    padding-left: 100px; /* Recuo para afastar os textos da borda da tela */
+    padding-left: 100px; 
 }
-
-/* Camada da imagem de fundo rotativa */
 #fundo-dinamico {
     position: fixed;
     top: 0;
@@ -915,8 +874,6 @@ body.home {
     background-repeat: no-repeat;
     transition: background-image 0.5s ease-in-out;
 }
-
-/* Película escura do modelo (Garante visibilidade na esquerda e destaca o fundo na direita) */
 body.home::before {
     content: '';
     position: fixed;
@@ -933,10 +890,6 @@ body.home::before {
     box-sizing: border-box;
 }
 
-/* ==========================================================================
-   CONTEÚDO DA HOME (CONVERTIDO PARA O ESTILO DA OPÇÃO 1)
-   ========================================================================== */
-
 /* Remove o bloco/caixa cinza de fundo e deixa os textos livres na tela */
 .home-box {
     background: transparent !important;
@@ -944,11 +897,10 @@ body.home::before {
     padding: 0 !important;
     border: none !important;
     width: 100%;
-    max-width: 680px; /* Largura ideal para os botões ficarem em linha horizontal */
-    text-align: left; /* Alinha os textos e títulos à esquerda */
+    max-width: 680px; 
+    text-align: left; 
 }
 
-/* Subtítulo simulado por cima para combinar com o modelo */
 
 /* Título principal FlixHub */
 .home-box h1 {
@@ -957,23 +909,13 @@ body.home::before {
     padding: 0;
     text-align: left; 
     width: 100%;
-    
-    /* MARGENS: 40px no topo (mais para baixo) e 8px embaixo (colado na descrição) */
     margin: 40px 0 8px 0; 
-
-    /* ENTRADA DO DEGRADÊ: De branco para cinza claro (estilo premium) */
     background: linear-gradient(to right, #ffffffb9 30%, #b3b3b34c 100%) !important;
-    
-    /* TRUQUE PARA CORTAR A COR NO FORMATO DAS LETRAS */
     -webkit-background-clip: text !important;
     background-clip: text !important;
-    
-    /* O !important aqui zera a cor sólida antiga e força o degradê a aparecer */
     -webkit-text-fill-color: transparent !important;
     text-fill-color: transparent !important;
     color: transparent !important; 
-
-    /* Sombra projetada para dar leitura contra o fundo escuro */
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6)); 
 }
 
@@ -982,18 +924,12 @@ body.home::before {
     color: #cccccc;
     font-size: 18px;
     line-height: 1.4;
-    /* Margens resetadas: 0 no topo, 0 na direita, 35px embaixo para afastar os botões, 0 na esquerda */
     margin: 0 0 35px 0; 
     padding: 0;
-    max-width: 400px; /* Encurta o texto para ficar idêntico ao modelo */
-    text-align: left; /* Garante que a descrição comece exatamente na mesma linha do título */
+    max-width: 400px; 
+    text-align: left;
     width: 100%;
 }
-
-/* ==========================================================================
-   BOTÕES ESTILO CARD HORIZONTAL
-   ========================================================================== */
-
 /* Coloca as caixas de botão lado a lado horizontais */
 .buttons {
     display: flex;
@@ -1018,21 +954,18 @@ body.home::before {
     font-weight: 600;
     color: #ffffff !important;
     text-decoration: none !important;
-    text-align: left; /* Texto interno alinhado à esquerda */
-    
-    /* Visual de vidro escuro reflexivo */
+    text-align: left; 
     background: rgba(10, 15, 30, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    
+    -webkit-backdrop-filter: blur(12px);  
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
     font-family: 'font10';
 }
 
-/* Efeito ao passar o mouse (Sobe um pouco e escurece) */
+/* Efeito ao passar o mouse */
 .home-btn:hover {
     transform: translateY(-4px);
     background: rgba(15, 22, 42, 0.75);
@@ -1048,56 +981,6 @@ body.home::before {
     padding-left: 4px;
 }
 
-/* ==========================================================================
-   RESPONSIVIDADE (TELA ADAPTÁVEL PARA CELULARES)
-   ========================================================================== */
-@media(max-width: 992px){
-    body.home {
-        display: block;
-        padding: 140px 30px 40px;
-        overflow-y: auto;
-    }
-
-    body.home::before {
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%) !important;
-    }
-
-    .home-box {
-        text-align: center;
-        max-width: 100%;
-    }
-
-    .home-box::before {
-        justify-content: center;
-    }
-
-    .home-box h1 {
-        font-size: 52px;
-    }
-
-    .home-box p {
-        max-width: 100%;
-        margin-bottom: 40px;
-    }
-
-    .buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .btn-box {
-        width: 100%;
-        max-width: 360px;
-        align-items: center;
-    }
-
-    .home-btn {
-        text-align: center;
-    }
-}
-/* ==========================================================================
-   BARRA DE NAVEGAÇÃO TOPO (LOGO NA ESQUERDA | ENTRAR E SAIR NA DIREITA)
-   ========================================================================== */
 .navbar {
     width: 100%;
     padding: 20px 70px;
@@ -1108,17 +991,14 @@ body.home::before {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
-    /* Configuração da barra literal: fundo preto com leve transparência e desfoque moderno */
     background: rgba(10, 10, 10, 0.85); 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Sutil linha divisória inferior */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     font-family: 'font9';
 }
 
-/* Estilo do nome FlixHub no canto esquerdo */
 .navbar .logo {
     color: #ffffffc8;
     font-size: 26px;
@@ -1127,13 +1007,12 @@ body.home::before {
     letter-spacing: 0.5px;
 }
 
-/* Bloco que agrupa os botões de ação no canto direito */
 .navbar .nav-actions {
     display: flex;
     align-items: center;
     gap: 15px;
 }
-/* Estilo padrão para os botões Entrar e Sair */
+
 .navbar .btn-entrar,
 .navbar .btn-sair {
     padding: 10px 24px;
@@ -1145,12 +1024,9 @@ body.home::before {
     text-decoration: none;
     font-size: 14px;
     transition: all 0.3s ease;
-    
-    /* MODIFICADO: Garante que os botões herdem a fonte do resto do sistema */
     font-family: 'font10'; 
 }
 
-/* Efeito Hover nos botões da navbar */
 .navbar .btn-entrar:hover,
 .navbar .btn-sair:hover {
     background: #ffffff;
@@ -1159,19 +1035,3 @@ body.home::before {
     transform: translateY(-1px);
 }
 
-/* Ajuste de espaçamento para telas de celulares */
-@media(max-width: 992px) {
-    .navbar {
-        padding: 15px 30px;
-    }
-    
-    .navbar .logo {
-        font-size: 22px;
-    }
-
-    .navbar .btn-entrar,
-    .navbar .btn-sair {
-        padding: 8px 16px;
-        font-size: 13px;
-    }
-}

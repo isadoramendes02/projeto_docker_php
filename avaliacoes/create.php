@@ -110,8 +110,7 @@ $fundos = [
                 <option value="2">⭐⭐</option>
                 <option value="1">⭐</option>
             </select>
-
-            <button type="submit" class="btn-atualizar" style="margin-top: 20px;">Enviar Avaliação</button>
+            <button type="submit" class="btn-atualizar">Enviar Avaliação</button>
 
             <a href="../filmes/read.php" class="voltar">← Cancelar</a>
 

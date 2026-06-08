@@ -7,29 +7,15 @@ $usuario_id = $_SESSION['usuario_id'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $titulo = $_POST['titulo'];
-    $genero = $_POST['genero']; // <-- NOVO: CAPTURA O GÊNERO SELECIONADO
+    $genero = $_POST['genero']; 
     $descricao = $_POST['descricao'];
 
     $imagem = $_FILES['imagem']['name'];
     move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
 
-    // Atualizado com a coluna e o parâmetro do gênero
     $sql = "
-        INSERT INTO series (
-            usuario_id,
-            titulo,
-            genero,
-            descricao,
-            imagem
-        )
-        VALUES (
-            :usuario_id,
-            :titulo,
-            :genero,
-            :descricao,
-            :imagem
-        )
-    ";
+        INSERT INTO series (usuario_id, titulo, genero, descricao,imagem)
+        VALUES (:usuario_id, :titulo,:genero,:descricao,:imagem)";
 
     $stmt = $conn->prepare($sql);
 

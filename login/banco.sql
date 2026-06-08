@@ -14,15 +14,12 @@ CREATE TABLE filmes (
     titulo VARCHAR(255),
     descricao TEXT,
     imagem VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE series (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     descricao TEXT,
-    temporadas INT,
-    ano_lancamento INT,
     imagem VARCHAR(255)
 );
 
