@@ -19,11 +19,10 @@ if (!$id) {
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['titulo'])) {
 
-    $titulo = $_POST['titulo'];
-    $genero_post = $_POST['genero'] ?? '';
-    $genero = substr($genero_post, 0, 30);
-    $descricao = $_POST['descricao'];
-    $imagem = $_FILES['imagem']['name'] ?? '';
+$titulo = $_POST['titulo'];
+$genero = $_POST['genero'];
+$descricao = $_POST['descricao'];
+$imagem = $_FILES['imagem']['name'] ?? '';
 
     if ($imagem) {
         move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
