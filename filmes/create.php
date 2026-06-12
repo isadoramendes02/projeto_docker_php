@@ -6,26 +6,50 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 
+$_SESSION['mensagem'] = "Filme adicionado com sucesso!";
+
 include '../conexao.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario_id = $_SESSION['usuario_id'];
     $titulo = $_POST['titulo'];
-    $genero = $_POST['genero']; 
+    $genero = $_POST['genero'];
     $descricao = $_POST['descricao'];
-    
+
+    $verifica = $conn->prepare("
+        SELECT COUNT(*) 
+        FROM filmes 
+        WHERE titulo = :titulo 
+        AND usuario_id = :usuario_id
+    ");
+
+    $verifica->execute([
+        ':titulo' => $titulo,
+        ':usuario_id' => $usuario_id
+    ]);
+
+    if ($verifica->fetchColumn() > 0) {
+        $_SESSION['mensagem'] = "Este filme já existe!";
+        header("Location: read.php");
+        exit();
+    }
+
     $imagem = $_FILES['imagem']['name'];
     move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
 
-    $sql = "INSERT INTO filmes (usuario_id, titulo, genero, descricao, imagem) VALUES (:usuario_id, :titulo, :genero, :descricao, :imagem)";
+    $sql = "INSERT INTO filmes (usuario_id, titulo, genero, descricao, imagem)
+            VALUES (:usuario_id, :titulo, :genero, :descricao, :imagem)";
+
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         ':usuario_id' => $usuario_id,
-        ':titulo'     => $titulo,
-        ':genero'     => $genero, 
-        ':descricao'  => $descricao,
-        ':imagem'     => $imagem
+        ':titulo' => $titulo,
+        ':genero' => $genero,
+        ':descricao' => $descricao,
+        ':imagem' => $imagem
     ]);
+
+    $_SESSION['mensagem'] = "Filme adicionado com sucesso!";
 
     header("Location: read.php");
     exit();

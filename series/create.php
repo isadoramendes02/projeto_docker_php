@@ -1,36 +1,67 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+
 include '../conexao.php';
 
 $usuario_id = $_SESSION['usuario_id'];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['titulo'])) {
 
     $titulo = $_POST['titulo'];
-    $genero = $_POST['genero']; 
-    $descricao = $_POST['descricao'];
 
-    $imagem = $_FILES['imagem']['name'];
-    move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
+    $genero_post = $_POST['genero'] ?? '';
+    $genero = substr($genero_post, 0, 30);
+
+    $descricao = $_POST['descricao'];
+    $imagem = $_FILES['imagem']['name'] ?? '';
+
+
+    $verifica = $conn->prepare("
+        SELECT COUNT(*)
+        FROM series
+        WHERE titulo = :titulo
+        AND usuario_id = :usuario_id
+    ");
+
+    $verifica->execute([
+        ':titulo' => $titulo,
+        ':usuario_id' => $usuario_id
+    ]);
+
+    if ($verifica->fetchColumn() > 0) {
+        $_SESSION['mensagem'] = "Esta série já existe!";
+        header("Location: read.php");
+        exit();
+    }
+
+    if ($imagem) {
+        move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
+    }
 
     $sql = "
-        INSERT INTO series (usuario_id, titulo, genero, descricao,imagem)
-        VALUES (:usuario_id, :titulo,:genero,:descricao,:imagem)";
+        INSERT INTO series (usuario_id, titulo, genero, descricao, imagem)
+        VALUES (:usuario_id, :titulo, :genero, :descricao, :imagem)";
 
     $stmt = $conn->prepare($sql);
 
     $stmt->execute([
         ':usuario_id' => $usuario_id,
         ':titulo'     => $titulo,
-        ':genero'     => $genero, // <-- NOVO: SALVA NO BANCO
+        ':genero'     => $genero,
         ':descricao'  => $descricao,
         ':imagem'     => $imagem
     ]);
 
+    $_SESSION['mensagem'] = "Série adicionada com sucesso!";
+
     header("Location: read.php");
     exit();
 }
-
 $fundos = [
     "../img/img2.jpg",
     "../img/img3.jpg",

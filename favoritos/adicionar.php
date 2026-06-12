@@ -3,7 +3,13 @@
 session_start();
 include '../conexao.php';
 
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+
 $usuario_id = $_SESSION['usuario_id'];
+
 
 $titulo = $_GET['titulo'];
 $tipo = $_GET['tipo'];
@@ -42,7 +48,6 @@ if (!$item) {
     die("Item não encontrado.");
 }
 
-/* evita favoritos duplicados */
 $stmt = $conn->prepare("
     SELECT COUNT(*)
     FROM favoritos

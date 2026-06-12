@@ -6,7 +6,6 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
-// Caminhos ajustados para buscar a partir da raiz onde fica o principal.php
 $fundos = [
     "img/img2.jpg",
     "img/img3.jpg",

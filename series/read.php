@@ -9,7 +9,6 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $usuario_id = $_SESSION['usuario_id'];
 
-
 $fundos = [
     "../img/img2.jpg",
     "../img/img3.jpg",
@@ -40,6 +39,13 @@ $fundos = [
 
 <body class="read-body">
 
+<?php
+if (isset($_SESSION['mensagem'])) {
+    echo '<div id="mensagem-sucesso" class="mensagem-sucesso">' . $_SESSION['mensagem'] . '</div>';
+    unset($_SESSION['mensagem']);
+}
+?>
+
 <nav class="navbar-sistema">
         <div class="navbar-logo">FlixHub</div>
 
@@ -56,111 +62,101 @@ $fundos = [
 <div class="catalog-container">
 
     <div class="catalog-header">
-
         <h1>Series Disponiveis</h1>
-
         <div class="header-actions">
-            <a href="create.php" class="btn-novo">
-                Add Nova Série
-            </a>
+            <a href="create.php" class="btn-novo">Add Nova Série</a>
         </div>
-
     </div>
 
     <div class="movies-grid">
 
         <?php
-        $stmt = $conn->prepare("
-            SELECT *
-            FROM series
-            WHERE usuario_id = :usuario_id
-        ");
-
-        $stmt->execute([
-            ':usuario_id' => $usuario_id
-        ]);
+        $stmt = $conn->prepare("SELECT * FROM series WHERE usuario_id = :usuario_id");
+        $stmt->execute([':usuario_id' => $usuario_id]);
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $favoritado = false;
 
-            $stmtFav = $conn->prepare("
-                SELECT COUNT(*)
-                FROM favoritos
-                WHERE titulo = :titulo
-                AND usuario_id = :usuario_id
-            ");
-
-            $stmtFav->execute([
-                ':titulo' => $row['titulo'],
-                ':usuario_id' => $usuario_id
-            ]);
-
-            $favoritado = $stmtFav->fetchColumn() > 0;
+            if (!empty($row['titulo'])) {
+                $stmtFav = $conn->prepare("
+                    SELECT COUNT(*)
+                    FROM favoritos
+                    WHERE titulo = :titulo
+                    AND tipo = 'Serie'
+                    AND usuario_id = :usuario_id
+                ");
+                $stmtFav->execute([
+                    ':titulo' => $row['titulo'],
+                    ':usuario_id' => $usuario_id
+                ]);
+                $favoritado = $stmtFav->fetchColumn() > 0;
+            }
         ?>
 
         <div class="movie-card">
-
             <div class="movie-poster">
                 <img src="../uploads/<?php echo $row['imagem']; ?>" alt="Poster da Série">
             </div>
 
             <div class="movie-info">
-
                 <h3>
-                    <?php echo htmlspecialchars($row['titulo']); ?>
-
-                    <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo']); ?>&tipo=Série&genero=<?php echo urlencode($row['genero'] ?? ''); ?>"
-                    class="<?= $favoritado ? 'favorito' : '' ?>">
-                        ★
-                    </a>
+                    <?php echo htmlspecialchars($row['titulo'] ?? ''); ?>
+                    <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo'] ?? ''); ?>&tipo=Serie&genero=<?php echo urlencode($row['genero'] ?? ''); ?>"
+                    class="<?= $favoritado ? 'favorito' : '' ?>">★</a>
                 </h3>
 
                 <?php if (!empty($row['genero'])) { ?>
-                    <p>
-                        <b>Gênero:</b> <?php echo htmlspecialchars($row['genero']); ?>
-                    </p>
+                    <p><b>Gênero:</b> <?php echo htmlspecialchars($row['genero']); ?></p>
                 <?php } ?>
 
-                <p>
-                    <?php echo htmlspecialchars($row['descricao']); ?>
-                </p>
+                <p><?php echo htmlspecialchars($row['descricao'] ?? ''); ?></p>
 
                 <div class="movie-actions">
 
-                    <a href="update.php?id=<?php echo $row['id']; ?>"
-                        class="btn-editar">
-                        Editar
-                    </a>
+                <form action="update.php" method="POST">
+                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                    <button type="submit" class="btn-editar">Editar</button>
+                </form>
 
-                    <a href="delete.php?id=<?php echo $row['id']; ?>"
-                        class="btn-deletar-lista">
-                        Excluir
-                    </a>
+                <form action="delete.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta série?');">
+                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                    <button type="submit" class="btn-deletar-lista">Excluir</button>
+                </form>
 
-                    <a href="../avaliacoes/create.php?serie_id=<?php echo $row['id']; ?>"
-                        class="btn-novo">
-                        Avaliar
-                    </a>
+                <form action="../avaliacoes/create.php" method="POST">
+                    <input type="hidden" name="serie_id" value="<?php echo $row['id']; ?>">
+                    <button type="submit" class="btn-novo">Avaliar</button>
+                </form>
 
-                </div>
-
+</div>
             </div>
-
         </div>
 
         <?php } ?>
 
     </div>
-
 </div>
 </body>
 </html>
+<script>
+setTimeout(() => {
+    const mensagem = document.getElementById('mensagem-sucesso');
+
+    if (mensagem) {
+        mensagem.style.transition = 'opacity 0.5s';
+        mensagem.style.opacity = '0';
+
+        setTimeout(() => {
+            mensagem.remove();
+        }, 500);
+    }
+}, 4000); 
+</script>
 
 <script>
     const fundos = <?php echo json_encode($fundos); ?>;
     let i = 0;
-
     document.body.style.backgroundImage = `url('${fundos[i]}')`;
-
     setInterval(() => {
         i = (i + 1) % fundos.length;
         document.body.style.backgroundImage = `url('${fundos[i]}')`;

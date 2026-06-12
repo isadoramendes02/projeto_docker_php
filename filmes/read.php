@@ -1,8 +1,14 @@
 <?php
 session_start();
-include '../conexao.php';
-$usuario_id = $_SESSION['usuario_id'];
 
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+
+include '../conexao.php';
+
+$usuario_id = $_SESSION['usuario_id'];
 
 $fundos = [
     "../img/img2.jpg",
@@ -23,7 +29,22 @@ $fundos = [
     "../img/img17.jpg",
 ];
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+    $id = $_POST['delete_id'];
+
+    $stmt = $conn->prepare("DELETE FROM filmes WHERE id = :id AND usuario_id = :usuario_id");
+    $stmt->execute([
+        ':id' => $id,
+        ':usuario_id' => $usuario_id
+    ]);
+
+    $_SESSION['mensagem'] = "Filme deletado com sucesso!";
+
+    header("Location: read.php");
+    exit();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -31,80 +52,138 @@ $fundos = [
     <title>Filmes</title>
     <link rel="stylesheet" href="../css/stylecrud.css">
 </head>
+
 <body class="read-body">
 
-    <nav class="navbar-sistema">
-        <div class="navbar-logo">FlixHub</div>
+<?php
+if (isset($_SESSION['mensagem'])) {
+    echo '<div id="mensagem-sucesso" class="mensagem-sucesso">' . $_SESSION['mensagem'] . '</div>';
+    unset($_SESSION['mensagem']);
+}
+?>
 
-        <ul class="navbar-abas">
-            <li><a href="../principal.php" class="aba-item">Início</a></li>
-            <li><a href="read.php" class="aba-item ativa">Filmes</a></li>
-            <li><a href="../series/read.php" class="aba-item">Séries</a></li>
-            <li><a href="../favoritos/read.php" class="aba-item">Favoritos</a></li>
-            <li><a href="../avaliacoes/read.php" class="aba-item">Avaliações</a></li>
-            <li><a href="../logout.php" class="aba-item">Sair</a></li>
-        </ul>
-    </nav>
+<nav class="navbar-sistema">
+    <div class="navbar-logo">FlixHub</div>
 
-    <div class="catalog-container">
-        <div class="catalog-header">
-            <h1>Filmes Disponiveis</h1>
-            <div class="header-actions">
-                <a href="create.php" class="btn-novo">Add Novo Filme</a>
-            </div>
-        </div>
+    <ul class="navbar-abas">
+        <li><a href="../principal.php" class="aba-item">Início</a></li>
+        <li><a href="read.php" class="aba-item ativa">Filmes</a></li>
+        <li><a href="../series/read.php" class="aba-item">Séries</a></li>
+        <li><a href="../favoritos/read.php" class="aba-item">Favoritos</a></li>
+        <li><a href="../avaliacoes/read.php" class="aba-item">Avaliações</a></li>
+        <li><a href="../logout.php" class="aba-item">Sair</a></li>
+    </ul>
+</nav>
 
-        <div class="movies-grid">
-            <?php
-            $stmt = $conn->prepare("SELECT * FROM filmes WHERE usuario_id = :usuario_id");
-            $stmt->execute([':usuario_id' => $usuario_id]);
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $stmtFav = $conn->prepare("SELECT COUNT(*) FROM favoritos WHERE titulo = :titulo AND usuario_id = :usuario_id");
-                $stmtFav->execute([':titulo' => $row['titulo'], ':usuario_id' => $usuario_id]);
-                $favoritado = $stmtFav->fetchColumn() > 0;
-            ?>
-            <div class="movie-card">
-                <div class="movie-poster">
-                    <img src="../uploads/<?php echo $row['imagem']; ?>" alt="Poster">
-                </div>
-                <div class="movie-info">
-                    <h3>
-                        <?php echo htmlspecialchars($row['titulo']); ?>
-                        <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo']); ?>&tipo=Filme&genero=<?php echo urlencode($row['genero'] ?? ''); ?>" class="<?= $favoritado ? 'favorito' : '' ?>">★</a>
-                    </h3>
-
-                    <?php if (!empty($row['genero'])) { ?>
-                        <p>
-                            <b>Gênero:</b> <?php echo htmlspecialchars($row['genero']); ?>
-                        </p>
-                    <?php } ?>
-
-                    <p><?php echo htmlspecialchars($row['descricao']); ?></p>
-                    
-                    <div class="movie-actions">
-                        <a href="update.php?id=<?php echo $row['id']; ?>" class="btn-editar">Editar</a>
-                        <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn-deletar-lista">Excluir</a>
-                        <a href="../avaliacoes/create.php?filme_id=<?php echo $row['id']; ?>" class="btn-novo">Avaliar</a>
-                    </div>
-                </div>
-            </div>
-            <?php } ?>
+<div class="catalog-container">
+    <div class="catalog-header">
+        <h1>Filmes Disponiveis</h1>
+        <div class="header-actions">
+            <a href="create.php" class="btn-novo">Add Novo Filme</a>
         </div>
     </div>
 
-</body>
-</html>
+    <div class="movies-grid">
+
+        <?php
+        $stmt = $conn->prepare("SELECT * FROM filmes WHERE usuario_id = :usuario_id");
+        $stmt->execute([':usuario_id' => $usuario_id]);
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $favoritado = false;
+
+            if (!empty($row['titulo'])) {
+                $stmtFav = $conn->prepare("
+                    SELECT COUNT(*) 
+                    FROM favoritos 
+                    WHERE titulo = :titulo 
+                    AND tipo = 'Filme' 
+                    AND usuario_id = :usuario_id
+                ");
+                $stmtFav->execute([
+                    ':titulo' => $row['titulo'],
+                    ':usuario_id' => $usuario_id
+                ]);
+
+                $favoritado = $stmtFav->fetchColumn() > 0;
+            }
+        ?>
+
+        <div class="movie-card">
+
+            <div class="movie-poster">
+                <img src="../uploads/<?php echo $row['imagem']; ?>" alt="Poster">
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    <?php echo htmlspecialchars($row['titulo'] ?? ''); ?>
+                    <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo'] ?? ''); ?>&tipo=Filme&genero=<?php echo urlencode($row['genero'] ?? ''); ?>" class="<?= $favoritado ? 'favorito' : '' ?>">★</a>
+                </h3>
+
+                <?php if (!empty($row['genero'])) { ?>
+                    <p><b>Gênero:</b> <?php echo htmlspecialchars($row['genero']); ?></p>
+                <?php } ?>
+
+                <p><?php echo htmlspecialchars($row['descricao'] ?? ''); ?></p>
+
+                <div class="movie-actions">
+
+                    <form action="update.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                        <button type="submit" class="btn-editar">Editar</button>
+                    </form>
+
+                    <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir?');" style="display:inline;">
+                        <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
+                        <button type="submit" class="btn-deletar-lista">Excluir</button>
+                    </form>
+
+                    <form action="../avaliacoes/create.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="filme_id" value="<?php echo $row['id']; ?>">
+                        <button type="submit" class="btn-novo">Avaliar</button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <?php } ?>
+
+    </div>
+</div>
 
 <script>
-        const fundos = <?php echo json_encode($fundos); ?>;
-        let i = 0;
+setTimeout(() => {
+    const mensagem = document.getElementById('mensagem-sucesso');
 
-        if (fundos.length > 0) {
-            document.body.style.backgroundImage = `url('${fundos[i]}')`;
-            setInterval(() => {
-                i = (i + 1) % fundos.length;
-                document.body.style.backgroundImage = `url('${fundos[i]}')`;
-            }, 5000);
-        }
+    if (mensagem) {
+        mensagem.style.transition = 'opacity 0.5s';
+        mensagem.style.opacity = '0';
+
+        setTimeout(() => {
+            mensagem.remove();
+        }, 500);
+    }
+}, 4000); 
 </script>
+
+<script>
+const fundos = <?php echo json_encode($fundos); ?>;
+let i = 0;
+
+if (fundos.length > 0) {
+    document.body.style.backgroundImage = `url('${fundos[i]}')`;
+
+    setInterval(() => {
+        i = (i + 1) % fundos.length;
+        document.body.style.backgroundImage = `url('${fundos[i]}')`;
+    }, 5000);
+}
+</script>
+
+</body>
+</html>

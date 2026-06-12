@@ -1,19 +1,29 @@
 <?php
+session_start();
 include '../conexao.php';
 
-$id = $_GET['id'] ?? $_POST['id'] ?? null;
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login/index.php");
+    exit;
+}
+include '../conexao.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$id = $_POST['id'] ?? $_GET['id'] ?? null;
+
+if (!$id) {
+    die("Item não encontrado.");
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['titulo'])) {
 
     $titulo = $_POST['titulo'];
-    $genero = $_POST['genero']; // <-- NOVO: CAPTURA O GÊNERO ATUALIZADO
+    $genero = $_POST['genero']; 
     $descricao = $_POST['descricao'];
-    $imagem = $_FILES['imagem']['name'];
+    $imagem = $_FILES['imagem']['name'] ?? '';
 
     if ($imagem) {
         move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
 
-        // Adicionado "genero=:genero" na Query com imagem
         $sql = "UPDATE series
                 SET titulo=:titulo,
                     genero=:genero,
@@ -24,14 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':titulo' => $titulo,
-            ':genero' => $genero, // <-- NOVO: SALVA NO BANCO
+            ':genero' => $genero,
             ':descricao' => $descricao,
             ':imagem' => $imagem,
             ':id' => $id
         ]);
     } else {
 
-        // Adicionado "genero=:genero" na Query sem imagem
         $sql = "UPDATE series
                 SET titulo=:titulo,
                     genero=:genero,
@@ -41,11 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':titulo' => $titulo,
-            ':genero' => $genero, // <-- NOVO: SALVA NO BANCO
+            ':genero' => $genero,
             ':descricao' => $descricao,
             ':id' => $id
         ]);
     }
+
+    $_SESSION['mensagem'] = "Série atualizada com sucesso!";
 
     header("Location: read.php");
     exit;
@@ -55,6 +66,9 @@ $stmt = $conn->prepare("SELECT * FROM series WHERE id = :id");
 $stmt->execute([':id' => $id]);
 $serie = $stmt->fetch(PDO::FETCH_ASSOC);
 
+if (!$serie) {
+    die("Série não encontrada no banco de dados.");
+}
 
 $fundos = [
     "../img/img2.jpg",
@@ -160,7 +174,6 @@ $fundos = [
 
 </body>
 </html>
-
 
 <script>
     const fundos = <?php echo json_encode($fundos); ?>;

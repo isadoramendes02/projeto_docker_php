@@ -1,36 +1,53 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+
+$_SESSION['mensagem'] = "Filme atualizado com sucesso!";
+
 include '../conexao.php';
 
-$id = $_GET['id'] ?? $_POST['id'] ?? null;
+$usuario_id = $_SESSION['usuario_id'];
+$id = $_POST['id'] ?? $_GET['id'] ?? null;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if (!$id) {
+    header("Location: read.php");
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['titulo'])) {
 
     $titulo = $_POST['titulo'];
-    $genero = $_POST['genero'];
+    $genero_post = $_POST['genero'] ?? '';
+    $genero = substr($genero_post, 0, 30);
     $descricao = $_POST['descricao'];
-    $imagem = $_FILES['imagem']['name'];
+    $imagem = $_FILES['imagem']['name'] ?? '';
 
     if ($imagem) {
         move_uploaded_file($_FILES['imagem']['tmp_name'], "../uploads/" . $imagem);
 
-        $sql = "UPDATE filmes SET titulo=:titulo, genero=:genero, descricao=:descricao, imagem=:imagem WHERE id=:id";
+        $sql = "UPDATE filmes SET titulo=:titulo, genero=:genero, descricao=:descricao, imagem=:imagem WHERE id=:id AND usuario_id=:usuario_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':titulo' => $titulo,
             ':genero' => $genero, 
             ':descricao' => $descricao,
             ':imagem' => $imagem,
-            ':id' => $id
+            ':id' => $id,
+            ':usuario_id' => $usuario_id
         ]);
     } else {
         
-        $sql = "UPDATE filmes SET titulo=:titulo, genero=:genero, descricao=:descricao WHERE id=:id";
+        $sql = "UPDATE filmes SET titulo=:titulo, genero=:genero, descricao=:descricao WHERE id=:id AND usuario_id=:usuario_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':titulo' => $titulo,
             ':genero' => $genero,
             ':descricao' => $descricao,
-            ':id' => $id
+            ':id' => $id,
+            ':usuario_id' => $usuario_id
         ]);
     }
 
@@ -38,10 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit;
 }
 
-$stmt = $conn->prepare("SELECT * FROM filmes WHERE id = :id");
-$stmt->execute([':id' => $id]);
+$stmt = $conn->prepare("SELECT * FROM filmes WHERE id = :id AND usuario_id = :usuario_id");
+$stmt->execute([':id' => $id, ':usuario_id' => $usuario_id]);
 $filme = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
+if (!$filme) {
+    header("Location: read.php");
+    exit;
+}
 
 $fundos = [
     "../img/img2.jpg",
@@ -61,7 +83,6 @@ $fundos = [
     "../img/img16.jpg",
     "../img/img17.jpg",
 ];
-
 ?>
 
 <!DOCTYPE html>

@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+
 include '../conexao.php';
 
 $usuario_id = $_SESSION['usuario_id'];
@@ -8,18 +14,17 @@ $id = null;
 $item = null;
 $tipo = '';
 
-if (isset($_GET['filme_id'])) {
-    $id = $_GET['filme_id'];
+
+if (isset($_POST['filme_id'])) {
+    $id = $_POST['filme_id'];
     $tipo = 'filme';
-
     $stmt = $conn->prepare("SELECT * FROM filmes WHERE id = :id");
-} elseif (isset($_GET['serie_id'])) {
-    $id = $_GET['serie_id'];
+} elseif (isset($_POST['serie_id'])) {
+    $id = $_POST['serie_id'];
     $tipo = 'serie';
-
     $stmt = $conn->prepare("SELECT * FROM series WHERE id = :id");
 } else {
-    die("Item não encontrado.");
+    die("Item não encontrado ou requisição inválida.");
 }
 
 $stmt->execute([':id' => $id]);
@@ -29,7 +34,7 @@ if (!$item) {
     die("Item não encontrado.");
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['nota'])) {
     $nota = $_POST['nota'];
 
     if ($tipo == 'filme') {
@@ -47,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ':usuario_id' => $usuario_id
         ]);
     }
+
+    $_SESSION['mensagem'] = "Avaliação adicionada com sucesso!";
 
     header("Location: read.php");
     exit();
@@ -95,11 +102,23 @@ $fundos = [
     <div class="create-container">
         <form method="POST" class="create-form">
 
+<?php
+            if ($tipo === 'filme') {
+            ?>
+                <input type="hidden" name="filme_id" value="<?php echo $id; ?>">
+            <?php
+            } else {
+            ?>
+                <input type="hidden" name="serie_id" value="<?php echo $id; ?>">
+            <?php
+            }
+            ?>
+
             <h1>Avaliar</h1>
 
             <p>
                 <strong><?php echo ucfirst($tipo); ?>:</strong>
-                <?php echo $item['titulo']; ?>
+                <?php echo htmlspecialchars($item['titulo'] ?? ''); ?>
             </p>
 
             <label>Nota</label>
@@ -112,11 +131,19 @@ $fundos = [
             </select>
             <button type="submit" class="btn-atualizar">Enviar Avaliação</button>
 
-            <a href="../filmes/read.php" class="voltar">← Cancelar</a>
-
+            <?php
+            if ($tipo === 'filme') {
+            ?>
+                <a href="../filmes/read.php" class="voltar">← Cancelar</a>
+            <?php
+            } else {
+            ?>
+                <a href="../series/read.php" class="voltar">← Cancelar</a>
+            <?php
+            }
+            ?>
         </form>
     </div>
-
     <script>
         const fundos = <?php echo json_encode($fundos); ?>;
         let i = 0;

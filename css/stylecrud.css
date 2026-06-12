@@ -632,7 +632,7 @@ h1 {
 p, p.msg {
     text-align: center;
     margin-bottom: 15px;
-    color: #1c183e; 
+    color: #ffffff; 
     font-size: 14px;
 }
 
@@ -1035,3 +1035,18 @@ body.home::before {
     transform: translateY(-1px);
 }
 
+.form-inline {
+    display: inline;
+}
+
+.mensagem-sucesso {
+    background: rgba(0, 0, 0, 0.925);
+    color: #ffffff;
+    border: 1px solid #16182c;
+    padding: 12px;
+    margin: 15px auto;
+    border-radius: 8px;
+    width: 80%;
+    text-align: center;
+    font-weight: bold;
+}
