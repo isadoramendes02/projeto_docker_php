@@ -29,11 +29,10 @@ $fundos = [
     "../img/img17.jpg",
 ];
 
-// MODIFICADO APENAS O BLOCO DE DELEÇÃO ABAIXO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $id = $_POST['delete_id'];
 
-    // 1. Busca o título do filme antes de deletar (necessário para os favoritos antigos)
     $stmtBusca = $conn->prepare("SELECT titulo FROM filmes WHERE id = :id AND usuario_id = :usuario_id");
     $stmtBusca->execute([
         ':id' => $id,
@@ -44,21 +43,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     if ($filme) {
         $titulo_filme = $filme['titulo'];
 
-        // 2. Apaga as avaliações vinculadas ao ID deste filme
+
         $stmtDelAval = $conn->prepare("DELETE FROM avaliacoes WHERE filme_id = :id AND usuario_id = :usuario_id");
         $stmtDelAval->execute([
             ':id' => $id,
             ':usuario_id' => $usuario_id
         ]);
 
-        // 3. Apaga os favoritos que possuem o mesmo título (funciona para dados velhos e novos)
+    
         $stmtDelFav = $conn->prepare("DELETE FROM favoritos WHERE titulo = :titulo AND usuario_id = :usuario_id AND tipo = 'Filme'");
         $stmtDelFav->execute([
             ':titulo' => $titulo_filme,
             ':usuario_id' => $usuario_id
         ]);
 
-        // 4. Por fim, apaga o filme da tabela principal
+    
         $stmt = $conn->prepare("DELETE FROM filmes WHERE id = :id AND usuario_id = :usuario_id");
         $stmt->execute([
             ':id' => $id,
@@ -114,7 +113,6 @@ if (isset($_SESSION['mensagem'])) {
     <div class="movies-grid">
 
         <?php
-        // MODIFICADO AQUI: Adicionado o ORDER BY id DESC para listar do mais atualizado para baixo
         $stmt = $conn->prepare("SELECT * FROM filmes WHERE usuario_id = :usuario_id ORDER BY id DESC");
         $stmt->execute([':usuario_id' => $usuario_id]);
 
@@ -149,7 +147,9 @@ if (isset($_SESSION['mensagem'])) {
 
                 <h3>
                     <?php echo htmlspecialchars($row['titulo'] ?? ''); ?>
-                    <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo'] ?? ''); ?>&tipo=Filme&genero=<?php echo urlencode($row['genero'] ?? ''); ?>" class="<?= $favoritado ? 'favorito' : '' ?>">★</a>
+                    
+                    <a href="../favoritos/adicionar.php?titulo=<?php echo urlencode($row['titulo'] ?? ''); ?>&tipo=Filme&genero=<?php echo urlencode($row['genero'] ?? ''); ?>" 
+                    class="<?php if ($favoritado) { echo 'favorito'; } else { echo ''; } ?>">★</a>
                 </h3>
 
                 <?php if (!empty($row['genero'])) { ?>
@@ -158,24 +158,24 @@ if (isset($_SESSION['mensagem'])) {
 
                 <p><?php echo htmlspecialchars($row['descricao'] ?? ''); ?></p>
 
-                <div class="movie-actions">
+                    <div class="movie-actions">
 
-                    <form action="update.php" method="POST" style="display:inline;">
-                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                        <button type="submit" class="btn-editar">Editar</button>
-                    </form>
+                        <form action="update.php" method="POST" class="form-editar">
+                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                            <button type="submit" class="btn-editar">Editar</button>
+                        </form>
 
-                    <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir?');" style="display:inline;">
-                        <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                        <button type="submit" class="btn-deletar-lista">Excluir</button>
-                    </form>
+                        <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir?');" class="form-excluir">
+                            <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
+                            <button type="submit" class="btn-deletar-lista">Excluir</button>
+                        </form>
 
-                    <form action="../avaliacoes/create.php" method="POST" style="display:inline;">
-                        <input type="hidden" name="filme_id" value="<?php echo $row['id']; ?>">
-                        <button type="submit" class="btn-novo">Avaliar</button>
-                    </form>
+                        <form action="../avaliacoes/create.php" method="POST" class="form-avaliar">
+                            <input type="hidden" name="filme_id" value="<?php echo $row['id']; ?>">
+                            <button type="submit" class="btn-novo">Avaliar</button>
+                        </form>
 
-                </div>
+                    </div>
 
             </div>
 

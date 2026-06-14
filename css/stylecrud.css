@@ -1050,3 +1050,19 @@ body.home::before {
     text-align: center;
     font-weight: bold;
 }
+
+.form-editar, 
+.form-deletar {
+    display: inline;
+}
+
+.movie-actions {
+    display: flex;
+    gap: 10px; 
+}
+
+.form-editar, 
+.form-excluir, 
+.form-avaliar {
+    display: inline;
+}

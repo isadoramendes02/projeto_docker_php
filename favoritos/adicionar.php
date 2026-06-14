@@ -13,6 +13,10 @@ $usuario_id = $_SESSION['usuario_id'];
 $titulo = $_GET['titulo'] ?? '';
 $tipo = $_GET['tipo'] ?? '';
 
+if (empty($titulo) || empty($tipo)) {
+    die("Dados insuficientes.");
+}
+
 if ($tipo == 'Filme') {
     $stmt = $conn->prepare("
         SELECT *
@@ -40,11 +44,13 @@ $stmt = $conn->prepare("
     FROM favoritos
     WHERE titulo = :titulo
     AND usuario_id = :usuario_id
+    AND tipo = :tipo
 ");
 
 $stmt->execute([
     ':titulo' => $item['titulo'],
-    ':usuario_id' => $usuario_id
+    ':usuario_id' => $usuario_id,
+    ':tipo' => $tipo
 ]);
 
 $jaExiste = $stmt->fetchColumn();
@@ -75,30 +81,10 @@ if ($jaExiste == 0) {
         ':imagem' => $item['imagem']
     ]);
 
-    // ADICIONADO: Mensagem de sucesso ao favoritar
     if ($tipo == 'Filme') {
         $_SESSION['mensagem'] = "Filme favoritado com sucesso!";
     } else {
         $_SESSION['mensagem'] = "Série favoritada com sucesso!";
-    }
-} else {
-    // ADICIONADO: Se já existia, agora remove (desfavorita) e avisa o usuário
-    $stmtDelete = $conn->prepare("
-        DELETE FROM favoritos 
-        WHERE titulo = :titulo 
-        AND usuario_id = :usuario_id 
-        AND tipo = :tipo
-    ");
-    $stmtDelete->execute([
-        ':titulo' => $item['titulo'],
-        ':usuario_id' => $usuario_id,
-        ':tipo' => $tipo
-    ]);
-
-    if ($tipo == 'Filme') {
-        $_SESSION['mensagem'] = "Filme removido dos favoritos!";
-    } else {
-        $_SESSION['mensagem'] = "Série removida dos favoritos!";
     }
 }
 

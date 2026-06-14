@@ -1,19 +1,14 @@
 <?php
-// Inicia sessão do usuário
 session_start();
 
-// Conexão com o banco de dados
 include '../conexao.php';
 
-// Mensagem do sistema
 $msg = "";
 
-// Verifica envio do formulário
 if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
-    // Busca usuário pelo email
     $sql = $conn->prepare("
         SELECT *
         FROM usuarios
@@ -27,10 +22,10 @@ if (isset($_POST['login'])) {
         $usuario = $sql->fetch(PDO::FETCH_ASSOC);
 
         if (password_verify($senha, $usuario['senha'])) {
-            // SALVA O ID DO USUÁRIO
+        
             $_SESSION['usuario_id'] = $usuario['id'];
 
-            // DADOS DO USUÁRIO
+        
             $_SESSION['nome'] = $usuario['nome'];
             $_SESSION['email'] = $usuario['email'];
 

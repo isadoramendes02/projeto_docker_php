@@ -64,7 +64,6 @@ if (isset($_SESSION['mensagem'])) {
 
     <div class="movies-grid">
         <?php
-        // MODIFICADO APENAS AQUI: Query alterada para filtrar apenas itens que ainda existem nas tabelas originais
         $stmt = $conn->prepare("
             SELECT * FROM favoritos 
             WHERE usuario_id = :usuario_id 
@@ -105,18 +104,17 @@ if (isset($_SESSION['mensagem'])) {
                 </p>
                 <?php } ?>
 
-                <div class="movie-actions">
-                    <form action="update.php" method="POST" style="display:inline;">
-                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                        <button type="submit" class="btn-editar">Editar</button>
-                    </form>
+                        <div class="movie-actions">
+                <form action="update.php" method="POST" class="form-editar">
+                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                    <button type="submit" class="btn-editar">Editar</button>
+                </form>
 
-                    <form action="delete.php" method="POST"
-                        onsubmit="return confirm('Tem certeza que deseja excluir?');"
-                        style="display:inline;">
-
-                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                        <button type="submit" class="btn-deletar-lista">Excluir</button>
+                <form action="delete.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir?');" class="form-deletar">
+                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                    <button type="submit" class="btn-deletar-lista">Excluir</button>
+                </form>
+            </div>
 
                     </form>
                 </div>

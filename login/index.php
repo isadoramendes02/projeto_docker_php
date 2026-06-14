@@ -79,7 +79,6 @@ $fundos = [
         let i = 0;
 
         if (fundos.length > 0) {
-            // Ajustado para aplicar o fundo na div correta e não sumir com o efeito do CSS
             const elFundo = document.getElementById('fundo-dinamico');
             if (elFundo) {
                 elFundo.style.backgroundImage = `url('${fundos[i]}')`;

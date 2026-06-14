@@ -1,14 +1,10 @@
 <?php 
-// Inicia a sessão
 session_start();
 
-// Conexão com o banco
 include '../conexao.php';
 
-// Mensagem do sistema
 $msg = "";
 
-// Cadastro
 if (isset($_POST['cadastrar'])) {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
