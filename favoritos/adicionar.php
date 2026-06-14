@@ -10,38 +10,25 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $usuario_id = $_SESSION['usuario_id'];
 
-
-$titulo = $_GET['titulo'];
-$tipo = $_GET['tipo'];
+$titulo = $_GET['titulo'] ?? '';
+$tipo = $_GET['tipo'] ?? '';
 
 if ($tipo == 'Filme') {
-
     $stmt = $conn->prepare("
         SELECT *
         FROM filmes
         WHERE titulo = :titulo
     ");
-
-    $stmt->execute([
-        ':titulo' => $titulo
-    ]);
-
+    $stmt->execute([':titulo' => $titulo]);
     $item = $stmt->fetch(PDO::FETCH_ASSOC);
-
 } else {
-
     $stmt = $conn->prepare("
         SELECT *
         FROM series
         WHERE titulo = :titulo
     ");
-
-    $stmt->execute([
-        ':titulo' => $titulo
-    ]);
-
+    $stmt->execute([':titulo' => $titulo]);
     $item = $stmt->fetch(PDO::FETCH_ASSOC);
-
 }
 
 if (!$item) {
@@ -87,6 +74,32 @@ if ($jaExiste == 0) {
         ':tipo' => $tipo,
         ':imagem' => $item['imagem']
     ]);
+
+    // ADICIONADO: Mensagem de sucesso ao favoritar
+    if ($tipo == 'Filme') {
+        $_SESSION['mensagem'] = "Filme favoritado com sucesso!";
+    } else {
+        $_SESSION['mensagem'] = "Série favoritada com sucesso!";
+    }
+} else {
+    // ADICIONADO: Se já existia, agora remove (desfavorita) e avisa o usuário
+    $stmtDelete = $conn->prepare("
+        DELETE FROM favoritos 
+        WHERE titulo = :titulo 
+        AND usuario_id = :usuario_id 
+        AND tipo = :tipo
+    ");
+    $stmtDelete->execute([
+        ':titulo' => $item['titulo'],
+        ':usuario_id' => $usuario_id,
+        ':tipo' => $tipo
+    ]);
+
+    if ($tipo == 'Filme') {
+        $_SESSION['mensagem'] = "Filme removido dos favoritos!";
+    } else {
+        $_SESSION['mensagem'] = "Série removida dos favoritos!";
+    }
 }
 
 if ($tipo == 'Filme') {

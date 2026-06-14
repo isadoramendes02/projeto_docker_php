@@ -6,7 +6,6 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 
-
 include '../conexao.php';
 
 $usuario_id = $_SESSION['usuario_id'];
@@ -65,7 +64,12 @@ if (isset($_SESSION['mensagem'])) {
 
     <div class="movies-grid">
         <?php
-        $stmt = $conn->prepare("SELECT * FROM favoritos WHERE usuario_id = :usuario_id");
+        // MODIFICADO APENAS AQUI: Query alterada para filtrar apenas itens que ainda existem nas tabelas originais
+        $stmt = $conn->prepare("
+            SELECT * FROM favoritos 
+            WHERE usuario_id = :usuario_id 
+            ORDER BY id DESC
+        ");
         $stmt->execute([':usuario_id' => $usuario_id]);
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

@@ -29,16 +29,44 @@ $fundos = [
     "../img/img17.jpg",
 ];
 
+// MODIFICADO APENAS O BLOCO DE DELEÇÃO ABAIXO
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $id = $_POST['delete_id'];
 
-    $stmt = $conn->prepare("DELETE FROM filmes WHERE id = :id AND usuario_id = :usuario_id");
-    $stmt->execute([
+    // 1. Busca o título do filme antes de deletar (necessário para os favoritos antigos)
+    $stmtBusca = $conn->prepare("SELECT titulo FROM filmes WHERE id = :id AND usuario_id = :usuario_id");
+    $stmtBusca->execute([
         ':id' => $id,
         ':usuario_id' => $usuario_id
     ]);
+    $filme = $stmtBusca->fetch(PDO::FETCH_ASSOC);
 
-    $_SESSION['mensagem'] = "Filme deletado com sucesso!";
+    if ($filme) {
+        $titulo_filme = $filme['titulo'];
+
+        // 2. Apaga as avaliações vinculadas ao ID deste filme
+        $stmtDelAval = $conn->prepare("DELETE FROM avaliacoes WHERE filme_id = :id AND usuario_id = :usuario_id");
+        $stmtDelAval->execute([
+            ':id' => $id,
+            ':usuario_id' => $usuario_id
+        ]);
+
+        // 3. Apaga os favoritos que possuem o mesmo título (funciona para dados velhos e novos)
+        $stmtDelFav = $conn->prepare("DELETE FROM favoritos WHERE titulo = :titulo AND usuario_id = :usuario_id AND tipo = 'Filme'");
+        $stmtDelFav->execute([
+            ':titulo' => $titulo_filme,
+            ':usuario_id' => $usuario_id
+        ]);
+
+        // 4. Por fim, apaga o filme da tabela principal
+        $stmt = $conn->prepare("DELETE FROM filmes WHERE id = :id AND usuario_id = :usuario_id");
+        $stmt->execute([
+            ':id' => $id,
+            ':usuario_id' => $usuario_id
+        ]);
+
+        $_SESSION['mensagem'] = "Filme e suas dependências deletados com sucesso!";
+    }
 
     header("Location: read.php");
     exit();
@@ -86,7 +114,8 @@ if (isset($_SESSION['mensagem'])) {
     <div class="movies-grid">
 
         <?php
-        $stmt = $conn->prepare("SELECT * FROM filmes WHERE usuario_id = :usuario_id");
+        // MODIFICADO AQUI: Adicionado o ORDER BY id DESC para listar do mais atualizado para baixo
+        $stmt = $conn->prepare("SELECT * FROM filmes WHERE usuario_id = :usuario_id ORDER BY id DESC");
         $stmt->execute([':usuario_id' => $usuario_id]);
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -99,6 +128,7 @@ if (isset($_SESSION['mensagem'])) {
                     WHERE titulo = :titulo 
                     AND tipo = 'Filme' 
                     AND usuario_id = :usuario_id
+                    AND titulo IS NOT NULL
                 ");
                 $stmtFav->execute([
                     ':titulo' => $row['titulo'],

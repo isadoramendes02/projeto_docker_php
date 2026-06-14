@@ -27,6 +27,56 @@ $fundos = [
     "../img/img16.jpg",
     "../img/img17.jpg",
 ];
+
+// MODIFICADO: Bloco de deleção em cascata adicionado aqui no topo
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && !isset($_POST['observacao'])) {
+    // Verifica se o POST veio do botão de excluir (não do editar)
+    // O formulário de excluir não aponta para outro arquivo, processa aqui mesmo
+    $id = $_POST['id'];
+
+    // 1. Busca o título da série antes de apagar
+    $stmtBusca = $conn->prepare("SELECT titulo FROM series WHERE id = :id AND usuario_id = :usuario_id");
+    $stmtBusca->execute([
+        ':id' => $id,
+        ':usuario_id' => $usuario_id
+    ]);
+    $serie = $stmtBusca->fetch(PDO::FETCH_ASSOC);
+
+    if ($serie) {
+        $titulo_serie = $serie['titulo'];
+
+        // 2. Apaga as avaliações vinculadas ao ID desta série
+        $stmtDelAval = $conn->prepare("DELETE FROM avaliacoes WHERE serie_id = :id AND usuario_id = :usuario_id");
+        $stmtDelAval->execute([
+            ':id' => $id,
+            ':usuario_id' => $usuario_id
+        ]);
+
+        // 3. Apaga os favoritos que possuem o mesmo título e tipo 'Serie'
+        $stmtDelFav = $conn->prepare("
+            DELETE FROM favoritos 
+            WHERE titulo = :titulo 
+            AND usuario_id = :usuario_id 
+            AND (tipo = 'Serie' OR tipo = 'Série')
+        ");
+        $stmtDelFav->execute([
+            ':titulo' => $titulo_serie,
+            ':usuario_id' => $usuario_id
+        ]);
+
+        // 4. Apaga a série da tabela principal
+        $stmt = $conn->prepare("DELETE FROM series WHERE id = :id AND usuario_id = :usuario_id");
+        $stmt->execute([
+            ':id' => $id,
+            ':usuario_id' => $usuario_id
+        ]);
+
+        $_SESSION['mensagem'] = "Série e seus favoritos deletados com sucesso!";
+    }
+
+    header("Location: read.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +121,8 @@ if (isset($_SESSION['mensagem'])) {
     <div class="movies-grid">
 
         <?php
-        $stmt = $conn->prepare("SELECT * FROM series WHERE usuario_id = :usuario_id");
+        // MODIFICADO AQUI: Adicionado o ORDER BY id DESC para listar da série mais atualizada para baixo
+        $stmt = $conn->prepare("SELECT * FROM series WHERE usuario_id = :usuario_id ORDER BY id DESC");
         $stmt->execute([':usuario_id' => $usuario_id]);
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -118,7 +169,7 @@ if (isset($_SESSION['mensagem'])) {
                     <button type="submit" class="btn-editar">Editar</button>
                 </form>
 
-                <form action="delete.php" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta série?');">
+                <form action="" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta série?');">
                     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                     <button type="submit" class="btn-deletar-lista">Excluir</button>
                 </form>
