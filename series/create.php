@@ -14,8 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['titulo'])) {
 
     $titulo = $_POST['titulo'];
 
-    $genero_post = $_POST['genero'] ?? '';
-    $genero = substr($genero_post, 0, 30);
+    $genero = $_POST['genero'] ?? '';
 
     $descricao = $_POST['descricao'];
     $imagem = $_FILES['imagem']['name'] ?? '';
@@ -134,7 +133,9 @@ $fundos = [
         <textarea name="descricao" required></textarea>
 
         <label>Imagem</label>
-        <input type="file" name="imagem" id="imagem" required style="display:none;">
+
+        <input type="file" name="imagem" id="imagem" required class="file-input">
+
         <label for="imagem" class="file-button">Escolher arquivo</label>
 
         <button type="submit">Salvar</button>

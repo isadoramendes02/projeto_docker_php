@@ -1066,3 +1066,11 @@ body.home::before {
 .form-avaliar {
     display: inline;
 }
+
+.file-input {
+    display: none;
+}
+
+.file-button {
+    cursor: pointer;
+}

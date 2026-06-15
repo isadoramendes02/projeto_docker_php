@@ -79,14 +79,11 @@ $fundos = [
         let i = 0;
 
         if (fundos.length > 0) {
-            const elFundo = document.getElementById('fundo-dinamico');
-            if (elFundo) {
-                elFundo.style.backgroundImage = `url('${fundos[i]}')`;
-                setInterval(() => {
-                    i = (i + 1) % fundos.length;
-                    elFundo.style.backgroundImage = `url('${fundos[i]}')`;
-                }, 5000);
-            }
+            document.body.style.backgroundImage = `url('${fundos[i]}')`;
+            setInterval(() => {
+                i = (i + 1) % fundos.length;
+                document.body.style.backgroundImage = `url('${fundos[i]}')`;
+            }, 5000);
         }
     </script>
 

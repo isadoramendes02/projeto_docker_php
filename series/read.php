@@ -48,12 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && !isset($_POS
             ':usuario_id' => $usuario_id
         ]);
 
-        $stmtDelFav = $conn->prepare("
-            DELETE FROM favoritos 
-            WHERE titulo = :titulo 
-            AND usuario_id = :usuario_id 
-            AND (tipo = 'Serie' OR tipo = 'Série')
-        ");
+        $stmtDelFav = $conn->prepare("DELETE FROM favoritos WHERE titulo = :titulo AND usuario_id = :usuario_id AND tipo = 'Serie'");
         $stmtDelFav->execute([
             ':titulo' => $titulo_serie,
             ':usuario_id' => $usuario_id
