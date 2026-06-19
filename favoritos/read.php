@@ -120,8 +120,8 @@ if (isset($_SESSION['mensagem'])) {
                 </div>
 
             </div>
+            <?php } ?>
         </div>
-        <?php } ?>
     </div>
 </div>
 
